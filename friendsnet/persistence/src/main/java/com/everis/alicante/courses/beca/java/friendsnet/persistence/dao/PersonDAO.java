@@ -7,7 +7,5 @@ import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Perso
 
 @Repository
 public interface PersonDAO extends CrudRepository<Person, Long>{
-	
-	
 
 }
