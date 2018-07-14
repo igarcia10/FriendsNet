@@ -1,4 +1,4 @@
-package com.everis.alicante.courses.beca.java.friendsnet.core.manager;
+package com.everis.alicante.courses.beca.java.friendsnet.core;
 
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.FNEntity;
 

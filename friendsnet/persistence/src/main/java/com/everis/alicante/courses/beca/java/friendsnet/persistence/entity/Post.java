@@ -19,6 +19,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.enums.PostType;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,7 +28,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "post_table")
-public class Post {
+public class Post implements FNEntity {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.enums.LikeType;
+
 import lombok.Getter;
 import lombok.Setter;
 
