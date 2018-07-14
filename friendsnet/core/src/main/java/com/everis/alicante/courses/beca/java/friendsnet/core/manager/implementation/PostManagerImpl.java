@@ -48,9 +48,10 @@ public class PostManagerImpl implements PostManager {
 	}
 
 	@Override
-	public Post addLike(Like like) {
-		// TODO Auto-generated method stub
-		return null;
+	public Post addLike(Long id, Like like) {
+		Post post = dao.findById(id).get();
+		post.addLike(like);
+		return dao.save(post);
 	}
 
 }

@@ -5,6 +5,6 @@ import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Perso
 
 public interface PersonManager extends Manager<Person, Long> {
 	
-	public Person relatePersons(Iterable<Person> persons);
+	public Person relatePersons(Long id, Iterable<Person> friends);
 
 }

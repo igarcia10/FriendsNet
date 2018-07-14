@@ -49,9 +49,17 @@ public class PersonManagerImpl implements PersonManager {
 	}
 
 	@Override
-	public Person relatePersons(Iterable<Person> persons) {
-		// TODO Auto-generated method stub
-		return null;
+	public Person relatePersons(Long id, Iterable<Person> friends) {
+		Person person = dao.findById(id).get();
+		for (Person friend : friends) {
+			if(null!=friend) {
+				friend = dao.findById(friend.getId()).get();
+				friend.getFriendOf().add(person);
+				person.getFriends().add(friend);
+				dao.save(friend);
+			}
+		}
+		return dao.save(person);
 	}
 
 }
