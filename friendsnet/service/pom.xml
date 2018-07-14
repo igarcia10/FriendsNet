@@ -38,7 +38,7 @@
 		</dependency>
 		<!-- TESTS -->
 		<dependency>
-			<groupId>com.everis.becaeoi.quitSmoking</groupId>
+			<groupId>com.everis.alicante.courses.beca.java</groupId>
 			<artifactId>test</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
