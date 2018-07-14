@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<person_table id="1" name="name1" surname="surname1" />
+	<person_table id="2" name="name2" surname="surname2" />
+	<person_table id="4" name="name4" surname="surname4" />
+	<person_table id="5" name="name5" surname="surname5" />
+</dataset>

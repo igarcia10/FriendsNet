@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<post_table id="1" text="text1" />
+	<post_table id="2" text="text2" />
+	<post_table id="4" text="text4" />
+	<post_table id="5" text="text5" />
+</dataset>

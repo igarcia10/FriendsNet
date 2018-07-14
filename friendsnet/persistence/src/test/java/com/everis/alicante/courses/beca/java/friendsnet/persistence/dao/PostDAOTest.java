@@ -1,5 +1,6 @@
 package com.everis.alicante.courses.beca.java.friendsnet.persistence.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
@@ -56,7 +57,59 @@ public class PostDAOTest {
 		//Act
 		Post post = dao.save(postDB);
 		//Assert
-		Assert.assertEquals(postDB, post);
+		Assert.assertEquals(postDB.getText(), post.getText());
+	}
+	
+	@Test
+	@DatabaseSetup("/db/post/init.xml")
+	@ExpectedDatabase(value = "/db/post/afterSavingMultiplePosts.xml", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void testSaveAll() {
+		//Arrange
+		Post postDB1 = new Post();
+		postDB1.setText("text4");
+		Post postDB2 = new Post();
+		postDB2.setText("text5");
+		List<Post> postsDB = new ArrayList<>();
+		postsDB.add(postDB1);
+		postsDB.add(postDB2);
+		//Act
+		List<Post> posts = (List<Post>) dao.saveAll(postsDB);
+		//Assert
+		Assert.assertEquals(posts.get(0).getText(), postsDB.get(0).getText());
+	}
+	
+	@Test
+	@DatabaseSetup("/db/post/init.xml")
+	@ExpectedDatabase(value = "/db/post/afterUpdatingPost.xml", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void testUpdate() {
+		//Arrange
+		Post postDB = new Post();
+		postDB.setId(1L);
+		postDB.setText("updatedText1");
+		//Act
+		Post post = dao.save(postDB);
+		//Assert
+		Assert.assertEquals(postDB.getText(), post.getText());
+	}
+	
+	@Test
+	@DatabaseSetup("/db/post/init.xml")
+	@ExpectedDatabase(value = "/db/post/afterUpdatingMultiplePosts.xml", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void testUpdateAll() {
+		//Arrange
+		Post postDB1 = new Post();
+		postDB1.setId(1L);
+		postDB1.setText("updatedText1");
+		Post postDB2 = new Post();
+		postDB2.setId(2L);
+		postDB2.setText("updatedText2");
+		List<Post> postsDB = new ArrayList<>();
+		postsDB.add(postDB1);
+		postsDB.add(postDB2);
+		//Act
+		List<Post> posts = (List<Post>) dao.saveAll(postsDB);
+		//Assert
+		Assert.assertEquals(posts.get(0).getText(), postsDB.get(0).getText());
 	}
 	
 	@Test

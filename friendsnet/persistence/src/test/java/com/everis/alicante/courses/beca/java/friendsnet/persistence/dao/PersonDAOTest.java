@@ -1,5 +1,6 @@
 package com.everis.alicante.courses.beca.java.friendsnet.persistence.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
@@ -58,7 +59,64 @@ public class PersonDAOTest {
 		//Act
 		Person person = dao.save(personDB);
 		//Assert
-		Assert.assertEquals(personDB, person);
+		Assert.assertEquals(personDB.getName(), person.getName());
+	}
+	
+	@Test
+	@DatabaseSetup("/db/person/init.xml")
+	@ExpectedDatabase(value = "/db/person/afterSavingMultiplePersons.xml", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void testSaveAll() {
+		//Arrange
+		Person personDB1 = new Person();
+		personDB1.setName("name4");
+		personDB1.setSurname("surname4");
+		Person personDB2 = new Person();
+		personDB2.setName("name5");
+		personDB2.setSurname("surname5");
+		List<Person> personsDB = new ArrayList<>();
+		personsDB.add(personDB1);
+		personsDB.add(personDB2);
+		//Act
+		List<Person> persons = (List<Person>) dao.saveAll(personsDB);
+		//Assert
+		Assert.assertEquals(persons.get(0).getName(), personsDB.get(0).getName());
+	}
+	
+	@Test
+	@DatabaseSetup("/db/person/init.xml")
+	@ExpectedDatabase(value = "/db/person/afterUpdatingPerson.xml", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void testUpdate() {
+		//Arrange
+		Person personDB = new Person();
+		personDB.setId(1L);
+		personDB.setName("updatedName1");
+		personDB.setSurname("surname1");
+		//Act
+		Person person = dao.save(personDB);
+		//Assert
+		Assert.assertEquals(personDB.getName(), person.getName());
+	}
+	
+	@Test
+	@DatabaseSetup("/db/person/init.xml")
+	@ExpectedDatabase(value = "/db/person/afterUpdatingMultiplePersons.xml", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void testUpdateAll() {
+		//Arrange
+		Person personDB1 = new Person();
+		personDB1.setId(1L);
+		personDB1.setName("updatedName1");
+		personDB1.setSurname("surname1");
+		Person personDB2 = new Person();
+		personDB2.setId(2L);
+		personDB2.setName("updatedName2");
+		personDB2.setSurname("surname2");
+		List<Person> personsDB = new ArrayList<>();
+		personsDB.add(personDB1);
+		personsDB.add(personDB2);
+		//Act
+		List<Person> persons = (List<Person>) dao.saveAll(personsDB);
+		//Assert
+		Assert.assertEquals(persons.get(0).getName(), personsDB.get(0).getName());
 	}
 	
 	@Test

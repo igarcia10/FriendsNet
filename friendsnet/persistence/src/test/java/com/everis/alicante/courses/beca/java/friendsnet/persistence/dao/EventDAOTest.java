@@ -1,5 +1,6 @@
 package com.everis.alicante.courses.beca.java.friendsnet.persistence.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
@@ -57,6 +58,58 @@ public class EventDAOTest {
 		Event event = dao.save(eventDB);
 		//Assert
 		Assert.assertEquals(eventDB, event);
+	}
+	
+	@Test
+	@DatabaseSetup("/db/event/init.xml")
+	@ExpectedDatabase(value = "/db/event/afterSavingMultipleEvents.xml", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void testSaveAll() {
+		//Arrange
+		Event eventDB1 = new Event();
+		eventDB1.setName("name4");
+		Event eventDB2 = new Event();
+		eventDB2.setName("name5");
+		List<Event> eventsDB = new ArrayList<>();
+		eventsDB.add(eventDB1);
+		eventsDB.add(eventDB2);
+		//Act
+		List<Event> events = (List<Event>) dao.saveAll(eventsDB);
+		//Assert
+		Assert.assertEquals(events.get(0).getName(), eventsDB.get(0).getName());
+	}
+	
+	@Test
+	@DatabaseSetup("/db/event/init.xml")
+	@ExpectedDatabase(value = "/db/event/afterUpdatingEvent.xml", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void testUpdate() {
+		//Arrange
+		Event eventDB = new Event();
+		eventDB.setId(1L);
+		eventDB.setName("updatedName1");
+		//Act
+		Event event = dao.save(eventDB);
+		//Assert
+		Assert.assertEquals(eventDB.getName(), event.getName());
+	}
+	
+	@Test
+	@DatabaseSetup("/db/event/init.xml")
+	@ExpectedDatabase(value = "/db/event/afterUpdatingMultipleEvents.xml", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void testUpdateAll() {
+		//Arrange
+		Event eventDB1 = new Event();
+		eventDB1.setId(1L);
+		eventDB1.setName("updatedName1");
+		Event eventDB2 = new Event();
+		eventDB2.setId(2L);
+		eventDB2.setName("updatedName2");
+		List<Event> eventsDB = new ArrayList<>();
+		eventsDB.add(eventDB1);
+		eventsDB.add(eventDB2);
+		//Act
+		List<Event> events = (List<Event>) dao.saveAll(eventsDB);
+		//Assert
+		Assert.assertEquals(events.get(0).getName(), eventsDB.get(0).getName());
 	}
 	
 	@Test

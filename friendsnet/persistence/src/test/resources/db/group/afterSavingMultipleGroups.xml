@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<group_table id="1" name="name1" />
+	<group_table id="2" name="name2" />
+	<group_table id="4" name="name4" />
+	<group_table id="5" name="name5" />
+</dataset>
