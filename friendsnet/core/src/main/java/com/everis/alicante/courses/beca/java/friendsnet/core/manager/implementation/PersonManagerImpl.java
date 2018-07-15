@@ -1,5 +1,8 @@
 package com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,14 +54,19 @@ public class PersonManagerImpl implements PersonManager {
 	@Override
 	public Person relatePersons(Long id, Iterable<Person> friends) {
 		Person person = dao.findById(id).get();
-		while(friends.iterator().hasNext()) {
-			Person friend = dao.findById(friends.iterator().next().getId()).get();
-			if(null!=friend) {
-				friend.getFriendOf().add(person);
-				person.getFriends().add(friend);
-				dao.save(friend);
+		List<Person> friendsDB = new ArrayList<>();
+		for (Person friend : friends) {
+			friendsDB.add(dao.findById(friend.getId()).get());
+		}
+		for (Person friendDB : friendsDB) {
+			if(null!=friendDB) {
+				friendDB.getFriends().add(person);
+				friendDB.getFriendOf().add(person);
+				person.getFriends().add(friendDB);
+				person.getFriendOf().add(friendDB);
 			}
 		}
+		dao.saveAll(friends);
 		return dao.save(person);
 	}
 
