@@ -15,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.GroupDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PersonDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Group;
+import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GroupManagerImplTest {
@@ -134,7 +135,39 @@ public class GroupManagerImplTest {
 	
 	@Test
 	public void testAddPersons() {
-		//TODO
+		//Arrange
+		Group group = new Group();
+		Person person1 = new Person();
+		person1.setName("name");
+		Person person2 = new Person();
+		List<Person> persons = new ArrayList<>();
+		persons.add(person1);
+		persons.add(person2);
+		group.getPersons().add(person1);
+		group.getPersons().add(person2);
+		Mockito.when(groupDAO.findById(1L)).thenReturn(Optional.of(group));
+		Mockito.when(groupDAO.save(Mockito.any())).thenReturn(group);
+		Mockito.when(personDAO.findById(person1.getId())).thenReturn(Optional.of(person1));
+		Mockito.when(personDAO.save(Mockito.any())).thenReturn(person1);
+		//Act
+		Group resultGroup = manager.addPersons(1L, persons);
+		//Assert
+		Assert.assertEquals(group, resultGroup);
+		Assert.assertEquals(2, resultGroup.getPersons().size());
+	}
+	
+	@Test
+	public void testAddPersonsWithNullContent() {
+		//Arrange
+		Group group = new Group();
+		List<Person> persons = new ArrayList<>();
+		Mockito.when(groupDAO.findById(1L)).thenReturn(Optional.of(group));
+		Mockito.when(groupDAO.save(Mockito.any())).thenReturn(group);
+		//Act
+		Group resultGroup = manager.addPersons(1L, persons);
+		//Assert
+		Assert.assertEquals(group, resultGroup);
+		Assert.assertEquals(0, resultGroup.getPersons().size());
 	}
 
 }
