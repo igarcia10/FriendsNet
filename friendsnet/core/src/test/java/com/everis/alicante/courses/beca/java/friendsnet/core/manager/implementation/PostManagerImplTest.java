@@ -12,7 +12,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.LikeDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PostDAO;
+import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Like;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Post;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -22,13 +24,16 @@ public class PostManagerImplTest {
 	private PostManagerImpl manager;
 
 	@Mock
-	private PostDAO dao;
+	private PostDAO postDAO;
+	
+	@Mock
+	private LikeDAO likeDAO;
 
 	@Test
 	public void testFindAll() {
 		// Arrange
 		final Iterable<Post> iterable = new ArrayList<>();
-		Mockito.when(dao.findAll()).thenReturn(iterable);
+		Mockito.when(postDAO.findAll()).thenReturn(iterable);
 		// Act
 		Iterable<Post> result = manager.findAll();
 		// Assert
@@ -39,7 +44,7 @@ public class PostManagerImplTest {
 	public void testFindById() {
 		// Arrange
 		final Post post = new Post();
-		Mockito.when(dao.findById(1L)).thenReturn(Optional.of(post));
+		Mockito.when(postDAO.findById(1L)).thenReturn(Optional.of(post));
 		// Act
 		Post resultPost = manager.findById(1L);
 		// Assert
@@ -51,7 +56,7 @@ public class PostManagerImplTest {
 		// Arrange
 		final Post post = new Post();
 		post.setText("post1");
-		Mockito.when(dao.save(Mockito.any())).thenReturn(post);
+		Mockito.when(postDAO.save(Mockito.any())).thenReturn(post);
 		Post resultPost = new Post();
 		// Act
 		resultPost = manager.save(post);
@@ -70,7 +75,7 @@ public class PostManagerImplTest {
 		final List<Post> posts = new ArrayList<>();
 		posts.add(post1);
 		posts.add(post2);
-		Mockito.when(dao.saveAll(Mockito.any())).thenReturn(posts);
+		Mockito.when(postDAO.saveAll(Mockito.any())).thenReturn(posts);
 		List<Post> resultPosts = new ArrayList<>();
 		// Act
 		resultPosts = (List<Post>) manager.save(posts);
@@ -85,7 +90,7 @@ public class PostManagerImplTest {
 		final Post post = new Post();
 		final Post updatedPost = new Post();
 		updatedPost.setText("updatedPost1");
-		Mockito.when(dao.save(Mockito.any())).thenReturn(updatedPost);
+		Mockito.when(postDAO.save(Mockito.any())).thenReturn(updatedPost);
 		Post resultPost = new Post();
 		// Act
 		resultPost = manager.update(post);
@@ -109,7 +114,7 @@ public class PostManagerImplTest {
 		final List<Post> updatedPosts = new ArrayList<>();
 		updatedPosts.add(post1);
 		updatedPosts.add(post2);
-		Mockito.when(dao.saveAll(Mockito.any())).thenReturn(updatedPosts);
+		Mockito.when(postDAO.saveAll(Mockito.any())).thenReturn(updatedPosts);
 		List<Post> resultPosts = new ArrayList<>();
 		// Act
 		resultPosts = (List<Post>) manager.update(posts);
@@ -125,12 +130,24 @@ public class PostManagerImplTest {
 		// Act
 		manager.remove(post);
 		// Assert
-		Mockito.verify(dao).delete(post);
+		Mockito.verify(postDAO).delete(post);
 	}
 
 	@Test
 	public void testAddLike() {
-		// TODO
+		//Arrage
+		final Post post = new Post();
+		final Like like = new Like();
+		post.addLike(like);
+		Mockito.when(postDAO.findById(1L)).thenReturn(Optional.of(post));
+		Mockito.when(postDAO.save(Mockito.any())).thenReturn(post);
+		Mockito.when(likeDAO.findById(Mockito.any())).thenReturn(Optional.of(like));
+		Mockito.when(likeDAO.save(Mockito.any())).thenReturn(like);
+		//Act
+		Post resultPost = manager.addLike(1L, like);
+		//Assert
+		Assert.assertEquals(post, resultPost);
+		Assert.assertEquals(post.getLikes().size(), resultPost.getLikes().size());
 	}
 
 }

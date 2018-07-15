@@ -1,8 +1,10 @@
 package com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -130,7 +132,25 @@ public class PersonManagerImplTest {
 
 	@Test
 	public void testRelatePersons() {
-		// TODO
+		//Arrange
+		final Person person = new Person();
+		final Set<Person> friends = new HashSet<>();
+		final Set<Person> friendOf = new HashSet<>();
+		for(int i=0;i<2;i++) {
+			friends.add(new Person());
+		}
+		for(int i=0;i<2;i++) {
+			friendOf.add(new Person());
+		}
+		person.setFriends(friends);
+		person.setFriendOf(friendOf);
+		Mockito.when(dao.findById(Mockito.any())).thenReturn(Optional.of(person));
+		Mockito.when(dao.save(Mockito.any())).thenReturn(person);
+		//Act
+		Person resultPerson = manager.relatePersons(1L, friends);
+		//Assert
+		Assert.assertEquals(person, resultPerson);
+		Assert.assertEquals(person.getFriends().size(), resultPerson.getFriends().size());
 	}
 
 }

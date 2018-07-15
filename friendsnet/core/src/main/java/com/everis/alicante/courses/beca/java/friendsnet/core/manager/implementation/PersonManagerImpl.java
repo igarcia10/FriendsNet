@@ -51,9 +51,9 @@ public class PersonManagerImpl implements PersonManager {
 	@Override
 	public Person relatePersons(Long id, Iterable<Person> friends) {
 		Person person = dao.findById(id).get();
-		for (Person friend : friends) {
+		while(friends.iterator().hasNext()) {
+			Person friend = dao.findById(friends.iterator().next().getId()).get();
 			if(null!=friend) {
-				friend = dao.findById(friend.getId()).get();
 				friend.getFriendOf().add(person);
 				person.getFriends().add(friend);
 				dao.save(friend);

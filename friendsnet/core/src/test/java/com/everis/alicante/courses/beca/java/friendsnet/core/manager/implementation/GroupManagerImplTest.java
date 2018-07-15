@@ -147,7 +147,7 @@ public class GroupManagerImplTest {
 		group.getPersons().add(person2);
 		Mockito.when(groupDAO.findById(1L)).thenReturn(Optional.of(group));
 		Mockito.when(groupDAO.save(Mockito.any())).thenReturn(group);
-		Mockito.when(personDAO.findById(person1.getId())).thenReturn(Optional.of(person1));
+		Mockito.when(personDAO.findById(Mockito.any())).thenReturn(Optional.of(person1));
 		Mockito.when(personDAO.save(Mockito.any())).thenReturn(person1);
 		//Act
 		Group resultGroup = manager.addPersons(1L, persons);

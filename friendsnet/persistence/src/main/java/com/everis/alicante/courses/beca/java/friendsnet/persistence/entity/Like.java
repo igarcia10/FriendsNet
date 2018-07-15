@@ -24,7 +24,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "order_table")
-public class Like {
+public class Like implements FNEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
