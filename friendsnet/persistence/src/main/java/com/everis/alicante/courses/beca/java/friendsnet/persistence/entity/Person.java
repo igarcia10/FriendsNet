@@ -40,11 +40,13 @@ public class Person implements FNEntity {
 
 	@ManyToMany
 	@JoinTable(name = "person_friends", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
-	private Set<Person> friends;
+	@Getter(lazy=true)
+	private final Set<Person> friends = new HashSet<>();
 
 	@ManyToMany
 	@JoinTable(name = "person_friends", joinColumns = @JoinColumn(name = "friend_id"), inverseJoinColumns = @JoinColumn(name = "person_id"))
-	private Set<Person> friendOf;
+	@Getter(lazy=true)
+	private final Set<Person> friendOf = new HashSet<>();
 
 	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Post> posts = new ArrayList<>();

@@ -132,25 +132,30 @@ public class PersonManagerImplTest {
 
 	@Test
 	public void testRelatePersons() {
-		//Arrange
+		// Arrange
 		final Person person = new Person();
+		person.setId(1L);
+
+		final Person friend2 = new Person();
+		friend2.setId(2L);
+		final Person friend3 = new Person();
+		friend3.setId(3L);
+
+		
 		final Set<Person> friends = new HashSet<>();
-		final Set<Person> friendOf = new HashSet<>();
-		for(int i=0;i<2;i++) {
-			friends.add(new Person());
-		}
-		for(int i=0;i<2;i++) {
-			friendOf.add(new Person());
-		}
-		person.setFriends(friends);
-		person.setFriendOf(friendOf);
-		Mockito.when(dao.findById(Mockito.any())).thenReturn(Optional.of(person));
-		Mockito.when(dao.save(Mockito.any())).thenReturn(person);
-		//Act
+		friends.add(friend2);
+		friends.add(friend3);
+		
+		Mockito.when(dao.findById(1L)).thenReturn(Optional.of(person));
+		Mockito.when(dao.findById(2L)).thenReturn(Optional.of(friend2));
+		Mockito.when(dao.findById(3L)).thenReturn(Optional.of(friend3));
+		Mockito.when(dao.save(person)).thenReturn(person);
+		// Act
 		Person resultPerson = manager.relatePersons(1L, friends);
-		//Assert
+		// Assert
 		Assert.assertEquals(person, resultPerson);
 		Assert.assertEquals(person.getFriends().size(), resultPerson.getFriends().size());
+		Mockito.verify(dao, Mockito.times(1)).save(person);
 	}
 
 }
