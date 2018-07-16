@@ -40,13 +40,10 @@ public class Person implements FNEntity {
 
 	@ManyToMany
 	@JoinTable(name = "person_friends", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
-	@Getter(lazy=true)
-	private final Set<Person> friends = new HashSet<>();
+	private Set<Person> friends;
 
-	@ManyToMany
-	@JoinTable(name = "person_friends", joinColumns = @JoinColumn(name = "friend_id"), inverseJoinColumns = @JoinColumn(name = "person_id"))
-	@Getter(lazy=true)
-	private final Set<Person> friendOf = new HashSet<>();
+	@ManyToMany(mappedBy="friends")
+	private Set<Person> friendOf;
 
 	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Post> posts = new ArrayList<>();
@@ -72,6 +69,20 @@ public class Person implements FNEntity {
     public void removeLike(Like like) {
     	likes.remove(like);
     	like.setPerson(null);
+    }
+    
+    public Set<Person> getFriends(){
+    	if(null==this.friends) {
+    		friends=new HashSet<>();
+    	}
+    	return this.friends;
+    }
+    
+    public Set<Person> getFriendOf(){
+    	if(null==this.friendOf) {
+    		friendOf=new HashSet<>();
+    	}
+    	return this.friendOf;
     }
 
 }
