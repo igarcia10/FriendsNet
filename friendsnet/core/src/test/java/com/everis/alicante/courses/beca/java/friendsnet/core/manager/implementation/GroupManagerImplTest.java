@@ -1,8 +1,10 @@
 package com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -146,7 +148,7 @@ public class GroupManagerImplTest {
 		group.getPersons().add(person1);
 		group.getPersons().add(person2);
 		Mockito.when(groupDAO.findById(1L)).thenReturn(Optional.of(group));
-		Mockito.when(groupDAO.save(Mockito.any())).thenReturn(group);
+		Mockito.when(groupDAO.save(group)).thenReturn(group);
 		Mockito.when(personDAO.findById(Mockito.any())).thenReturn(Optional.of(person1));
 		Mockito.when(personDAO.save(Mockito.any())).thenReturn(person1);
 		//Act
@@ -157,17 +159,45 @@ public class GroupManagerImplTest {
 	}
 	
 	@Test
-	public void testAddPersonsWithNullContent() {
+	public void testAddPersonsWithNullList() {
 		//Arrange
 		Group group = new Group();
-		List<Person> persons = new ArrayList<>();
+		List<Person> persons = null;
 		Mockito.when(groupDAO.findById(1L)).thenReturn(Optional.of(group));
-		Mockito.when(groupDAO.save(Mockito.any())).thenReturn(group);
 		//Act
 		Group resultGroup = manager.addPersons(1L, persons);
 		//Assert
-		Assert.assertEquals(group, resultGroup);
-		Assert.assertEquals(0, resultGroup.getPersons().size());
+		Assert.assertNull(resultGroup);
+	}
+	
+	@Test
+	public void testAddPersonsWithGroupNotInDB() {
+		//Arrange
+		List<Person> persons = new ArrayList<>();
+		Mockito.when(groupDAO.findById(1L)).thenReturn(Optional.ofNullable(null));
+		//Act
+		Group resultGroup = manager.addPersons(1L, persons);
+		//Assert
+		Assert.assertNull(resultGroup);
+	}
+	
+	@Test
+	public void testAddPersonsWithPersonNotInDB() {
+		//Arrange
+				Group group = new Group();
+				Person person1 = new Person();
+				person1.setId(2L);
+				Person person2 = null;
+				Set<Person> persons = new HashSet<>();
+				persons.add(person1);
+				persons.add(person2);
+				Mockito.when(groupDAO.findById(1L)).thenReturn(Optional.of(group));
+				Mockito.when(groupDAO.save(group)).thenReturn(group);
+				Mockito.when(personDAO.findById(2L)).thenReturn(Optional.ofNullable(null));
+				//Act
+				Group resultGroup = manager.addPersons(1L, persons);
+				//Assert
+				Assert.assertEquals(0, resultGroup.getPersons().size());
 	}
 
 }

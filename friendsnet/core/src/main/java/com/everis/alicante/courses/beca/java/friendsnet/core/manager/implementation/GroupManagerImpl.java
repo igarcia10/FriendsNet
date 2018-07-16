@@ -15,22 +15,29 @@ public class GroupManagerImpl extends AbstractManager<Group, Long> implements Gr
 
 	@Autowired
 	private GroupDAO groupDAO;
-	
+
 	@Autowired
 	private PersonDAO personDAO;
 
 	@Override
 	public Group addPersons(Long id, Iterable<Person> persons) {
-		Group group = this.getDAO().findById(id).get();
-		for (Person person : persons) {
-			if(null!=person) {
-				person = personDAO.findById(person.getId()).get();
-				group.getPersons().add(person);
-				person.getGroups().add(group);
-				personDAO.save(person);
+		Group group = this.getDAO().findById(id).orElse(null);
+		if (null != persons && null != group) {
+			for (Person person : persons) {
+				if (null != person) {
+					person = personDAO.findById(person.getId()).orElse(null);
+					if (null != person) {
+						group.getPersons().add(person);
+						person.getGroups().add(group);
+						personDAO.save(person);
+					}
+				}
 			}
+			group = this.getDAO().save(group);
+		} else if (null != group) {
+			group = null;
 		}
-		return this.getDAO().save(group);
+		return group;
 	}
 
 	@Override
