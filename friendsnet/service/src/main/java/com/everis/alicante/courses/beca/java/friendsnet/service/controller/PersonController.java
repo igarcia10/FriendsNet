@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +28,7 @@ public class PersonController {
 	private DozerBeanMapper mapper;
 
 	@GetMapping
-	public List<PersonDTO> findAll() {
+	public List<PersonDTO> getAll() {
 		List<Person> personList = (List<Person>) manager.findAll();
 		List<PersonDTO> personDTOList = new ArrayList<>();
 		if (null != personList) {
@@ -39,23 +40,51 @@ public class PersonController {
 	}
 
 	@GetMapping("/{id}")
-	public PersonDTO findById(@PathVariable("id") Long id) {
+	public PersonDTO getById(@PathVariable("id") Long id) {
 		final Person person = manager.findById(id);
-		PersonDTO personDTO = new PersonDTO();
+		PersonDTO personDTO = null;
 		if (null != person) {
 			personDTO = mapper.map(person, PersonDTO.class);
 		}
 		return personDTO;
 	}
-	
+
 	@PostMapping
-	public PersonDTO save(@RequestBody PersonDTO person) {
-		Person personDB = manager.findById(person.getId());
-		PersonDTO personDTO = new PersonDTO();
-		if(null!=personDB) {
-			personDTO = mapper.map(person, PersonDTO.class);
+	public PersonDTO create(@RequestBody PersonDTO person) {
+		Person personDB = manager.save(mapper.map(person, Person.class));
+		PersonDTO personDTO = null;
+		if (null != personDB) {
+			personDTO = mapper.map(personDB, PersonDTO.class);
 		}
 		return personDTO;
 	}
-	
+
+	// TODO
+	@PostMapping("/{id}/relate")
+	public PersonDTO relate(@PathVariable("id") Long id, @RequestBody List<PersonDTO> friends) {
+		PersonDTO personDTO = new PersonDTO();
+		Person personDB = manager.findById(id);
+		if (null != personDB) {
+			Person friendDB = new Person();
+			List<Person> friendsDB = new ArrayList<>();
+			for (PersonDTO friend : friends) {
+				if (null != friend) {
+					friendDB = manager.findById(friend.getId());
+					friendsDB.add(friendDB);
+				}
+			}
+			personDB = manager.relatePersons(id, friendsDB);
+			personDTO = mapper.map(personDB, PersonDTO.class);
+		}
+		return personDTO;
+	}
+
+	@DeleteMapping("/{id}")
+	public void remove(@PathVariable("id") Long id) {
+		final Person person = manager.findById(id);
+		if (null != person) {
+			manager.remove(person);
+		}
+	}
+
 }
