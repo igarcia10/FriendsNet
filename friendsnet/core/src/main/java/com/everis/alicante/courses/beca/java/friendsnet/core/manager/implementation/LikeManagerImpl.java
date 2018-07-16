@@ -18,6 +18,4 @@ public class LikeManagerImpl extends AbstractManager<Like, Long> implements Like
 		return dao;
 	}
 
-	
-
 }

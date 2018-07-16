@@ -31,9 +31,19 @@ public class LikeManagerImplTest {
 		final Iterable<Like> iterable = new ArrayList<>();
 		Mockito.when(dao.findAll()).thenReturn(iterable);
 		// Act
-		Iterable<Like> result = manager.findAll();
+		final Iterable<Like> result = manager.findAll();
 		// Assert
 		Assert.assertEquals(iterable, result);
+	}
+	
+	@Test
+	public void testFindAllNull() {
+		// Arrange
+		Mockito.when(dao.findAll()).thenReturn(null);
+		// Act
+		final Iterable<Like> result = manager.findAll();
+		// Assert
+		Assert.assertNull(result);
 	}
 
 	@Test
@@ -42,9 +52,19 @@ public class LikeManagerImplTest {
 		final Like like = new Like();
 		Mockito.when(dao.findById(1L)).thenReturn(Optional.of(like));
 		// Act
-		Like resultLike = manager.findById(1L);
+		final Like resultLike = manager.findById(1L);
 		// Assert
 		Assert.assertEquals(like, resultLike);
+	}
+	
+	@Test
+	public void testFindByIdNull() {
+		// Arrange
+		Mockito.when(dao.findById(1L)).thenReturn(Optional.ofNullable(null));
+		// Act
+		final Like like = manager.findById(1L);
+		//Assert
+		Assert.assertNull(like);
 	}
 
 	@Test
@@ -54,10 +74,9 @@ public class LikeManagerImplTest {
 		final Post post = new Post();
 		post.setText("text");
 		like.setPost(post);
-		Mockito.when(dao.save(Mockito.any())).thenReturn(like);
-		Like resultLike = new Like();
+		Mockito.when(dao.save(like)).thenReturn(like);
 		// Act
-		resultLike = manager.save(like);
+		final Like resultLike = manager.save(like);
 		// Assert
 		Assert.assertEquals(like, resultLike);
 		Assert.assertEquals(like.getPost().getText(), resultLike.getPost().getText());
@@ -75,10 +94,9 @@ public class LikeManagerImplTest {
 		final List<Like> likes = new ArrayList<>();
 		likes.add(like1);
 		likes.add(like2);
-		Mockito.when(dao.saveAll(Mockito.any())).thenReturn(likes);
-		List<Like> resultLikes = new ArrayList<>();
+		Mockito.when(dao.saveAll(likes)).thenReturn(likes);
 		// Act
-		resultLikes = (List<Like>) manager.save(likes);
+		final List<Like> resultLikes = (List<Like>) manager.save(likes);
 		// Assert
 		Assert.assertEquals(likes, resultLikes);
 		Assert.assertEquals(likes.get(0).getPost().getText(), resultLikes.get(0).getPost().getText());
@@ -92,9 +110,9 @@ public class LikeManagerImplTest {
 		final Like like = new Like();
 		final Like updatedLike = new Like();
 		updatedLike.setPost(post);
-		Mockito.when(dao.save(Mockito.any())).thenReturn(updatedLike);
+		Mockito.when(dao.save(like)).thenReturn(updatedLike);
 		// Act
-		Like resultLike = manager.update(like);
+		final Like resultLike = manager.update(like);
 		// Assert
 		Assert.assertEquals(updatedLike, resultLike);
 		Assert.assertEquals(updatedLike.getPost().getText(), resultLike.getPost().getText());
@@ -117,10 +135,9 @@ public class LikeManagerImplTest {
 		final List<Like> updatedLikes = new ArrayList<>();
 		updatedLikes.add(updatedLike1);
 		updatedLikes.add(updatedLike2);
-		Mockito.when(dao.saveAll(Mockito.any())).thenReturn(updatedLikes);
-		List<Like> resultLikes = new ArrayList<>();
+		Mockito.when(dao.saveAll(likes)).thenReturn(updatedLikes);
 		// Act
-		resultLikes = (List<Like>) manager.update(likes);
+		final List<Like> resultLikes = (List<Like>) manager.update(likes);
 		// Assert
 		Assert.assertEquals(updatedLikes, resultLikes);
 		Assert.assertEquals(updatedLikes.get(0).getPost().getText(), resultLikes.get(0).getPost().getText());

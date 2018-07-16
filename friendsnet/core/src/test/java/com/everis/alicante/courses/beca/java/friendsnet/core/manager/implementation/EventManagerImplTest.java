@@ -30,7 +30,7 @@ public class EventManagerImplTest {
 		final Iterable<Event> iterable = new ArrayList<>();
 		Mockito.when(dao.findAll()).thenReturn(iterable);
 		// Act
-		Iterable<Event> result = manager.findAll();
+		final Iterable<Event> result = manager.findAll();
 		// Assert
 		Assert.assertEquals(iterable, result);
 	}
@@ -40,7 +40,7 @@ public class EventManagerImplTest {
 		// Arrange
 		Mockito.when(dao.findAll()).thenReturn(null);
 		// Act
-		Iterable<Event> result = manager.findAll();
+		final Iterable<Event> result = manager.findAll();
 		// Assert
 		Assert.assertNull(result);
 	}
@@ -51,7 +51,7 @@ public class EventManagerImplTest {
 		final Event event = new Event();
 		Mockito.when(dao.findById(1L)).thenReturn(Optional.of(event));
 		// Act
-		Event resultEvent = manager.findById(1L);
+		final Event resultEvent = manager.findById(1L);
 		// Assert
 		Assert.assertEquals(event, resultEvent);
 	}
@@ -71,7 +71,7 @@ public class EventManagerImplTest {
 		// Arrange
 		final Event event = new Event();
 		event.setName("event1");
-		Mockito.when(dao.save(Mockito.any())).thenReturn(event);
+		Mockito.when(dao.save(event)).thenReturn(event);
 		// Act
 		final Event resultEvent = manager.save(event);
 		// Assert
@@ -89,10 +89,9 @@ public class EventManagerImplTest {
 		final List<Event> events = new ArrayList<>();
 		events.add(event1);
 		events.add(event2);
-		Mockito.when(dao.saveAll(Mockito.any())).thenReturn(events);
-		List<Event> resultEvents = new ArrayList<>();
+		Mockito.when(dao.saveAll(events)).thenReturn(events);
 		// Act
-		resultEvents = (List<Event>) manager.save(events);
+		 final List<Event> resultEvents = (List<Event>) manager.save(events);
 		// Assert
 		Assert.assertEquals(events, resultEvents);
 		Assert.assertEquals(events.get(0).getName(), resultEvents.get(0).getName());
@@ -104,10 +103,9 @@ public class EventManagerImplTest {
 		final Event event = new Event();
 		final Event updatedEvent = new Event();
 		updatedEvent.setName("updatedEvent1");
-		Mockito.when(dao.save(Mockito.any())).thenReturn(updatedEvent);
-		Event resultEvent = new Event();
+		Mockito.when(dao.save(event)).thenReturn(updatedEvent);
 		// Act
-		resultEvent = manager.update(event);
+		final Event resultEvent = manager.update(event);
 		// Assert
 		Assert.assertEquals(updatedEvent, resultEvent);
 		Assert.assertEquals(updatedEvent.getName(), resultEvent.getName());
@@ -128,10 +126,9 @@ public class EventManagerImplTest {
 		final List<Event> updatedEvents = new ArrayList<>();
 		updatedEvents.add(event1);
 		updatedEvents.add(event2);
-		Mockito.when(dao.saveAll(Mockito.any())).thenReturn(updatedEvents);
-		List<Event> resultEvents = new ArrayList<>();
+		Mockito.when(dao.saveAll(events)).thenReturn(updatedEvents);
 		// Act
-		resultEvents = (List<Event>) manager.update(events);
+		final List<Event> resultEvents = (List<Event>) manager.update(events);
 		// Assert
 		Assert.assertEquals(updatedEvents, resultEvents);
 		Assert.assertEquals(updatedEvents.get(0).getName(), resultEvents.get(0).getName());

@@ -17,15 +17,24 @@ public class PersonManagerImpl extends AbstractManager<Person, Long> implements 
 
 	@Override
 	public Person relatePersons(Long id, Iterable<Person> friends) {
-		final Person person = dao.findById(id).get();
-		for (final Person friend : friends) {
-			final Person friendPerson = dao.findById(friend.getId()).get();
-			friendPerson.getFriends().add(person);
-			friendPerson.getFriendOf().add(person);
-			person.getFriends().add(friendPerson);
-			person.getFriendOf().add(friendPerson);
+		Person person = dao.findById(id).orElse(null);
+		if (null != person && null != friends) {
+			for (final Person friend : friends) {
+				if (null != friend) {
+					final Person friendPerson = dao.findById(friend.getId()).orElse(null);
+					if (null != friendPerson) {
+						friendPerson.getFriends().add(person);
+						friendPerson.getFriendOf().add(person);
+						person.getFriends().add(friendPerson);
+						person.getFriendOf().add(friendPerson);
+					}
+				}
+			}
+			person = dao.save(person);
+		} else {
+			person = null;
 		}
-		return dao.save(person);
+		return person;
 	}
 
 	@Override

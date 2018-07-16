@@ -32,9 +32,19 @@ public class PersonManagerImplTest {
 		final Iterable<Person> iterable = new ArrayList<>();
 		Mockito.when(dao.findAll()).thenReturn(iterable);
 		// Act
-		Iterable<Person> result = manager.findAll();
+		final Iterable<Person> result = manager.findAll();
 		// Assert
 		Assert.assertEquals(iterable, result);
+	}
+	
+	@Test
+	public void testFindAllNull() {
+		// Arrange
+		Mockito.when(dao.findAll()).thenReturn(null);
+		// Act
+		final Iterable<Person> result = manager.findAll();
+		// Assert
+		Assert.assertNull(result);
 	}
 
 	@Test
@@ -43,9 +53,19 @@ public class PersonManagerImplTest {
 		final Person person = new Person();
 		Mockito.when(dao.findById(1L)).thenReturn(Optional.of(person));
 		// Act
-		Person resultPerson = manager.findById(1L);
+		final Person resultPerson = manager.findById(1L);
 		// Assert
 		Assert.assertEquals(person, resultPerson);
+	}
+	
+	@Test
+	public void testFindByIdNull() {
+		// Arrange
+		Mockito.when(dao.findById(1L)).thenReturn(Optional.ofNullable(null));
+		// Act
+		final Person person = manager.findById(1L);
+		//Assert
+		Assert.assertNull(person);
 	}
 
 	@Test
@@ -53,10 +73,9 @@ public class PersonManagerImplTest {
 		// Arrange
 		final Person person = new Person();
 		person.setName("person1");
-		Mockito.when(dao.save(Mockito.any())).thenReturn(person);
-		Person resultPerson = new Person();
+		Mockito.when(dao.save(person)).thenReturn(person);
 		// Act
-		resultPerson = manager.save(person);
+		final Person resultPerson = manager.save(person);
 		// Assert
 		Assert.assertEquals(person, resultPerson);
 		Assert.assertEquals(person.getName(), resultPerson.getName());
@@ -72,10 +91,9 @@ public class PersonManagerImplTest {
 		final List<Person> persons = new ArrayList<>();
 		persons.add(person1);
 		persons.add(person2);
-		Mockito.when(dao.saveAll(Mockito.any())).thenReturn(persons);
-		List<Person> resultPersons = new ArrayList<>();
+		Mockito.when(dao.saveAll(persons)).thenReturn(persons);
 		// Act
-		resultPersons = (List<Person>) manager.save(persons);
+		final List<Person> resultPersons = (List<Person>) manager.save(persons);
 		// Assert
 		Assert.assertEquals(persons, resultPersons);
 		Assert.assertEquals(persons.get(0).getName(), resultPersons.get(0).getName());
@@ -87,10 +105,9 @@ public class PersonManagerImplTest {
 		final Person person = new Person();
 		final Person updatedPerson = new Person();
 		updatedPerson.setName("updatedPerson1");
-		Mockito.when(dao.save(Mockito.any())).thenReturn(updatedPerson);
-		Person resultPerson = new Person();
+		Mockito.when(dao.save(person)).thenReturn(updatedPerson);
 		// Act
-		resultPerson = manager.update(person);
+		final Person resultPerson = manager.update(person);
 		// Assert
 		Assert.assertEquals(updatedPerson, resultPerson);
 		Assert.assertEquals(updatedPerson.getName(), resultPerson.getName());
@@ -111,10 +128,9 @@ public class PersonManagerImplTest {
 		final List<Person> updatedPersons = new ArrayList<>();
 		updatedPersons.add(person1);
 		updatedPersons.add(person2);
-		Mockito.when(dao.saveAll(Mockito.any())).thenReturn(updatedPersons);
-		List<Person> resultPersons = new ArrayList<>();
+		Mockito.when(dao.saveAll(persons)).thenReturn(updatedPersons);
 		// Act
-		resultPersons = (List<Person>) manager.update(persons);
+		final List<Person> resultPersons = (List<Person>) manager.update(persons);
 		// Assert
 		Assert.assertEquals(updatedPersons, resultPersons);
 		Assert.assertEquals(updatedPersons.get(0).getName(), resultPersons.get(0).getName());
@@ -135,26 +151,101 @@ public class PersonManagerImplTest {
 		// Arrange
 		final Person person = new Person();
 		person.setId(1L);
-
 		final Person friend2 = new Person();
 		friend2.setId(2L);
 		final Person friend3 = new Person();
 		friend3.setId(3L);
-
-		
 		final Set<Person> friends = new HashSet<>();
 		friends.add(friend2);
 		friends.add(friend3);
-		
 		Mockito.when(dao.findById(1L)).thenReturn(Optional.of(person));
 		Mockito.when(dao.findById(2L)).thenReturn(Optional.of(friend2));
 		Mockito.when(dao.findById(3L)).thenReturn(Optional.of(friend3));
 		Mockito.when(dao.save(person)).thenReturn(person);
 		// Act
-		Person resultPerson = manager.relatePersons(1L, friends);
+		final Person resultPerson = manager.relatePersons(1L, friends);
 		// Assert
 		Assert.assertEquals(person, resultPerson);
 		Assert.assertEquals(person.getFriends().size(), resultPerson.getFriends().size());
+		Mockito.verify(dao, Mockito.times(1)).save(person);
+	}
+	
+	@Test
+	public void testRelatePersonsNullId() {
+		final Person friend2 = new Person();
+		final Person friend3 = new Person();
+		final Set<Person> friends = new HashSet<>();
+		friends.add(friend2);
+		friends.add(friend3);
+		// Act
+		final Person resultPerson = manager.relatePersons(1L, friends);
+		// Assert
+		Assert.assertNull(resultPerson);
+	}
+	
+	@Test
+	public void testRelatePersonsNullFriends() {
+		// Arrange
+		final Person person = new Person();
+		Mockito.when(dao.findById(1L)).thenReturn(Optional.of(person));
+		// Act
+		final Person resultPerson = manager.relatePersons(1L, null);
+		// Assert
+		Assert.assertNull(resultPerson);
+	}
+	
+	@Test
+	public void testRelatePersonsOneFriendNull() {
+		// Arrange
+		final Person person = new Person();
+		person.setId(1L);
+		final Person friend2 = new Person();
+		friend2.setId(2L);
+		final Person friend3 = null;
+		final Set<Person> friends = new HashSet<>();
+		friends.add(friend2);
+		friends.add(friend3);
+		Mockito.when(dao.findById(1L)).thenReturn(Optional.of(person));
+		Mockito.when(dao.findById(2L)).thenReturn(Optional.of(friend2));
+		Mockito.when(dao.save(person)).thenReturn(person);
+		// Act
+		final Person resultPerson = manager.relatePersons(1L, friends);
+		// Assert
+		Assert.assertEquals(1, resultPerson.getFriends().size());
+		Mockito.verify(dao, Mockito.times(1)).save(person);
+	}
+	
+	@Test
+	public void testRelatePersonsPersonNotInDb() {
+		// Arrange
+		final List<Person> friends = new ArrayList<>();
+		Mockito.when(dao.findById(1L)).thenReturn(Optional.ofNullable(null));
+		// Act
+		final Person resultPerson = manager.relatePersons(1L, friends);
+		// Assert
+		Assert.assertNull(resultPerson);
+	}
+	
+	@Test
+	public void testRelatePersonsOneFriendNotInDb() {
+		// Arrange
+		final Person person = new Person();
+		person.setId(1L);
+		final Person friend2 = new Person();
+		friend2.setId(2L);
+		final Person friend3 = new Person();
+		friend3.setId(3L);
+		final Set<Person> friends = new HashSet<>();
+		friends.add(friend2);
+		friends.add(friend3);
+		Mockito.when(dao.findById(1L)).thenReturn(Optional.of(person));
+		Mockito.when(dao.findById(2L)).thenReturn(Optional.of(friend2));
+		Mockito.when(dao.findById(3L)).thenReturn(Optional.ofNullable(null));
+		Mockito.when(dao.save(person)).thenReturn(person);
+		// Act
+		final Person resultPerson = manager.relatePersons(1L, friends);
+		// Assert
+		Assert.assertEquals(1, resultPerson.getFriends().size());
 		Mockito.verify(dao, Mockito.times(1)).save(person);
 	}
 
