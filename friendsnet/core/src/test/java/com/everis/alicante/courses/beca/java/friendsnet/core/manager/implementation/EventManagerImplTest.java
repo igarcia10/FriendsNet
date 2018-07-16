@@ -34,6 +34,16 @@ public class EventManagerImplTest {
 		// Assert
 		Assert.assertEquals(iterable, result);
 	}
+	
+	@Test
+	public void testFindAllNull() {
+		// Arrange
+		Mockito.when(dao.findAll()).thenReturn(null);
+		// Act
+		Iterable<Event> result = manager.findAll();
+		// Assert
+		Assert.assertNull(result);
+	}
 
 	@Test
 	public void testFindById() {
@@ -45,6 +55,16 @@ public class EventManagerImplTest {
 		// Assert
 		Assert.assertEquals(event, resultEvent);
 	}
+	
+	@Test
+	public void testFindByIdNull() {
+		// Arrange
+		Mockito.when(dao.findById(1L)).thenReturn(Optional.ofNullable(null));
+		// Act
+		final Event event = manager.findById(1L);
+		//Assert
+		Assert.assertNull(event);
+	}
 
 	@Test
 	public void testSave() {
@@ -52,9 +72,8 @@ public class EventManagerImplTest {
 		final Event event = new Event();
 		event.setName("event1");
 		Mockito.when(dao.save(Mockito.any())).thenReturn(event);
-		Event resultEvent = new Event();
 		// Act
-		resultEvent = manager.save(event);
+		final Event resultEvent = manager.save(event);
 		// Assert
 		Assert.assertEquals(event, resultEvent);
 		Assert.assertEquals(event.getName(), resultEvent.getName());
