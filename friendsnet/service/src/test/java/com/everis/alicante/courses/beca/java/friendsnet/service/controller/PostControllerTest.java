@@ -153,13 +153,19 @@ public class PostControllerTest {
 	public void testRemove() throws Exception {
 		//Arrange
 		final Post post = new Post();
-		final PostDTO postDTO = new PostDTO();
 		Mockito.when(manager.findById(1L)).thenReturn(post);
-		Mockito.when(dozerMapper.map(post, PostDTO.class)).thenReturn(postDTO);
 		//Act
-		ResultActions perform = mockMvc.perform(delete("/posts/1").content(mapper.writeValueAsString(postDTO))
-															.contentType(MediaType.APPLICATION_JSON)
-															.accept(MediaType.APPLICATION_JSON));
+		ResultActions perform = mockMvc.perform(delete("/posts/1"));
+		//Assert
+		perform.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void testRemoveNotInDb() throws Exception {
+		//Arrange
+		Mockito.when(manager.findById(1L)).thenReturn(null);
+		//Act
+		ResultActions perform = mockMvc.perform(delete("/posts/1"));
 		//Assert
 		perform.andExpect(status().isOk());
 	}

@@ -153,13 +153,19 @@ public class GroupControllerTest {
 	public void testRemove() throws Exception {
 		//Arrange
 		final Group group = new Group();
-		final GroupDTO groupDTO = new GroupDTO();
 		Mockito.when(manager.findById(1L)).thenReturn(group);
-		Mockito.when(dozerMapper.map(group, GroupDTO.class)).thenReturn(groupDTO);
 		//Act
-		ResultActions perform = mockMvc.perform(delete("/groups/1").content(mapper.writeValueAsString(groupDTO))
-															.contentType(MediaType.APPLICATION_JSON)
-															.accept(MediaType.APPLICATION_JSON));
+		ResultActions perform = mockMvc.perform(delete("/groups/1"));
+		//Assert
+		perform.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void testRemoveNotInDb() throws Exception {
+		//Arrange
+		Mockito.when(manager.findById(1L)).thenReturn(null);
+		//Act
+		ResultActions perform = mockMvc.perform(delete("/groups/1"));
 		//Assert
 		perform.andExpect(status().isOk());
 	}

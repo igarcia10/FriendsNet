@@ -59,7 +59,6 @@ public class PersonController {
 		return personDTO;
 	}
 
-	// TODO
 	@PostMapping("/{id}/relate")
 	public PersonDTO relate(@PathVariable("id") Long id, @RequestBody List<PersonDTO> friends) {
 		PersonDTO personDTO = new PersonDTO();
@@ -70,7 +69,9 @@ public class PersonController {
 			for (PersonDTO friend : friends) {
 				if (null != friend) {
 					friendDB = manager.findById(friend.getId());
-					friendsDB.add(friendDB);
+					if (null != friendDB) {
+						friendsDB.add(friendDB);
+					}
 				}
 			}
 			personDB = manager.relatePersons(id, friendsDB);
