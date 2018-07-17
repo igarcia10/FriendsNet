@@ -7,7 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.dozer.DozerBeanMapper;
 import org.junit.Before;
@@ -25,6 +27,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation.PersonManagerImpl;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
+import com.everis.alicante.courses.beca.java.friendsnet.service.dto.FriendDTO;
 import com.everis.alicante.courses.beca.java.friendsnet.service.dto.PersonDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -162,6 +165,33 @@ public class PersonControllerTest {
 															.accept(MediaType.APPLICATION_JSON));
 		//Assert
 		perform.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void testRelate() throws Exception {
+		//Arrange
+		final Person person = new Person();
+		person.setId(1L);
+		final PersonDTO personDTO = new PersonDTO();
+		personDTO.setId(1L);
+		final Person friend = new Person();
+		friend.setId(2L);
+		final FriendDTO friendDTO = new FriendDTO();
+		friendDTO.setId(2L);
+		final Set<FriendDTO> listFriendsDTO = new HashSet<>();
+		listFriendsDTO.add(friendDTO);
+		personDTO.setFriends(listFriendsDTO);
+		Mockito.when(manager.findById(1L)).thenReturn(person);
+		Mockito.when(manager.findById(2L)).thenReturn(friend);
+		Mockito.when(manager.relatePersons(Mockito.anyLong(), Mockito.any())).thenReturn(person);
+		Mockito.when(dozerMapper.map(person, PersonDTO.class)).thenReturn(personDTO);
+		//Act
+		ResultActions perform = mockMvc.perform(post("/persons/1/relate").content(mapper.writeValueAsString(listFriendsDTO))
+														.contentType(MediaType.APPLICATION_JSON)
+														.accept(MediaType.APPLICATION_JSON));
+		//Assert
+		perform.andExpect(status().isOk());
+		perform.andExpect(content().json(mapper.writeValueAsString(personDTO)));
 	}
 
 }
