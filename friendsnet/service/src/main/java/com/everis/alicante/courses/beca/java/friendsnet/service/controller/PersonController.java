@@ -26,24 +26,14 @@ public class PersonController extends AbstractController<PersonDTO, Person, Long
 	private PersonManagerImpl manager;
 
 	@PostMapping("/{id}/relate")
-	public PersonDTO relate(@PathVariable("id") Long id, @RequestBody List<PersonDTO> friends) {
-		PersonDTO personDTO = new PersonDTO();
-		Person personDB = this.manager.findById(id);
-		if (null != personDB) {
-			Person friendDB = new Person();
-			List<Person> friendsDB = new ArrayList<>();
-			for (PersonDTO friend : friends) {
-				if (null != friend) {
-					friendDB = manager.findById(friend.getId());
-					if (null != friendDB) {
-						friendsDB.add(friendDB);
-					}
+	public PersonDTO relate(@PathVariable("id") Long id, @RequestBody List<PersonDTO> friendsDTO) {
+			List<Person> friends = new ArrayList<>();
+			for (PersonDTO friendDTO : friendsDTO) {
+				if (null != friendDTO) {
+						friends.add(mapper.map(friendDTO, Person.class));
 				}
 			}
-			personDB = manager.relatePersons(id, friendsDB);
-			personDTO = mapper.map(personDB, PersonDTO.class);
-		}
-		return personDTO;
+		return mapper.map(manager.relatePersons(id, friends), PersonDTO.class);
 	}
 
 }

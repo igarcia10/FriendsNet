@@ -177,76 +177,20 @@ public class PersonControllerTest {
 	public void testRelate() throws Exception {
 		//Arrange
 		final Person person = new Person();
-		person.setId(1L);
 		final PersonDTO personDTO = new PersonDTO();
-		personDTO.setId(1L);
 		final Person friend1 = new Person();
-		friend1.setId(2L);
 		final Person friend2 = new Person();
-		friend2.setId(3L);
 		final FriendDTO friendDTO1 = new FriendDTO();
-		friendDTO1.setId(2L);
 		final FriendDTO friendDTO2 = new FriendDTO();
-		friendDTO2.setId(3L);
 		final FriendDTO friendDTOnull = null;
 		final Set<FriendDTO> listFriendsDTO = new HashSet<>();
 		listFriendsDTO.add(friendDTO1);
 		listFriendsDTO.add(friendDTO2);
 		listFriendsDTO.add(friendDTOnull);
-		Mockito.when(manager.findById(1L)).thenReturn(person);
-		Mockito.when(manager.findById(2L)).thenReturn(friend1);
-		Mockito.when(manager.findById(3L)).thenReturn(friend2);
 		Mockito.when(manager.relatePersons(Mockito.anyLong(), Mockito.any())).thenReturn(person);
 		Mockito.when(dozerMapper.map(person, PersonDTO.class)).thenReturn(personDTO);
-		//Act
-		ResultActions perform = mockMvc.perform(post("/persons/1/relate").content(mapper.writeValueAsString(listFriendsDTO))
-														.contentType(MediaType.APPLICATION_JSON)
-														.accept(MediaType.APPLICATION_JSON));
-		//Assert
-		perform.andExpect(status().isOk());
-		perform.andExpect(content().json(mapper.writeValueAsString(personDTO)));
-	}
-	
-	@Test
-	public void testRelatePersonNotInDB() throws Exception {
-		//Arrange
-		final Person person = new Person();
-		person.setId(1L);
-		final FriendDTO friendDTO1 = new FriendDTO();
-		final FriendDTO friendDTO2 = new FriendDTO();
-		final Set<FriendDTO> listFriendsDTO = new HashSet<>();
-		listFriendsDTO.add(friendDTO1);
-		listFriendsDTO.add(friendDTO2);
-		Mockito.when(manager.findById(1L)).thenReturn(null);
-		//Act
-		ResultActions perform = mockMvc.perform(post("/persons/1/relate").content(mapper.writeValueAsString(listFriendsDTO))
-														.contentType(MediaType.APPLICATION_JSON)
-														.accept(MediaType.APPLICATION_JSON));
-		//Assert
-		perform.andExpect(status().isOk());
-	}
-	
-	@Test
-	public void testRelateOneFriendNotInDb() throws Exception {
-		//Arrange
-		final Person person = new Person();
-		person.setId(1L);
-		final PersonDTO personDTO = new PersonDTO();
-		personDTO.setId(1L);
-		final Person friend1 = new Person();
-		friend1.setId(2L);
-		final FriendDTO friendDTO1 = new FriendDTO();
-		friendDTO1.setId(2L);
-		final FriendDTO friendDTO2 = new FriendDTO();
-		friendDTO2.setId(3L);
-		final Set<FriendDTO> listFriendsDTO = new HashSet<>();
-		listFriendsDTO.add(friendDTO1);
-		listFriendsDTO.add(friendDTO2);
-		Mockito.when(manager.findById(1L)).thenReturn(person);
-		Mockito.when(manager.findById(2L)).thenReturn(friend1);
-		Mockito.when(manager.findById(3L)).thenReturn(null);
-		Mockito.when(manager.relatePersons(Mockito.anyLong(), Mockito.any())).thenReturn(person);
-		Mockito.when(dozerMapper.map(person, PersonDTO.class)).thenReturn(personDTO);
+		Mockito.when(dozerMapper.map(friendDTO1, Person.class)).thenReturn(friend1);
+		Mockito.when(dozerMapper.map(friendDTO2, Person.class)).thenReturn(friend2);
 		//Act
 		ResultActions perform = mockMvc.perform(post("/persons/1/relate").content(mapper.writeValueAsString(listFriendsDTO))
 														.contentType(MediaType.APPLICATION_JSON)
