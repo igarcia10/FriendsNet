@@ -25,32 +25,34 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation.GroupManagerImpl;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Group;
+import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
 import com.everis.alicante.courses.beca.java.friendsnet.service.dto.GroupDTO;
+import com.everis.alicante.courses.beca.java.friendsnet.service.dto.PersonDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 public class GroupControllerTest {
-	
+
 	@InjectMocks
 	private GroupController controller;
-	
+
 	@Mock
 	private GroupManagerImpl manager;
-	
+
 	@Mock
 	private DozerBeanMapper dozerMapper;
 
 	private MockMvc mockMvc;
 
 	private ObjectMapper mapper;
-	
+
 	@Before
 	public void setup() {
 		this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 		this.mapper = new ObjectMapper();
 	}
-	
+
 	@Test
 	public void testFindAllNull() throws Exception {
 		// Arrange
@@ -60,7 +62,7 @@ public class GroupControllerTest {
 		// Assert
 		perform.andExpect(status().isOk());
 	}
-	
+
 	@Test
 	public void testFindAllWithContent() throws Exception {
 		// Arrange
@@ -87,52 +89,51 @@ public class GroupControllerTest {
 		perform.andExpect(status().isOk());
 		perform.andExpect(content().json(mapper.writeValueAsString(groupDTOList)));
 	}
-	
+
 	@Test
 	public void testFindByIdNull() throws Exception {
-		//Arrange
+		// Arrange
 		Mockito.when(manager.findById(1L)).thenReturn(null);
-		//Act
+		// Act
 		final ResultActions perform = mockMvc.perform(get("/groups/1"));
-		//Assert
+		// Assert
 		perform.andExpect(status().isOk());
 	}
-	
+
 	@Test
 	public void testFindByIdWithContent() throws Exception {
-		//Arrange
+		// Arrange
 		final Group group = new Group();
 		group.setName("group");
 		final GroupDTO groupDTO = new GroupDTO();
 		groupDTO.setName("group");
 		Mockito.when(manager.findById(1L)).thenReturn(group);
 		Mockito.when(dozerMapper.map(group, GroupDTO.class)).thenReturn(groupDTO);
-		//Act
+		// Act
 		final ResultActions perform = mockMvc.perform(get("/groups/1"));
-		//Assert
+		// Assert
 		perform.andExpect(status().isOk());
 		perform.andExpect(content().json(mapper.writeValueAsString(groupDTO)));
 	}
-	
+
 	@Test
 	public void testCreateNull() throws Exception {
-		//Arrange
+		// Arrange
 		final Group group = new Group();
 		final GroupDTO groupDTO = new GroupDTO();
 		Mockito.when(manager.save(group)).thenReturn(null);
 		Mockito.when(dozerMapper.map(group, GroupDTO.class)).thenReturn(null);
 		Mockito.when(dozerMapper.map(Mockito.any(GroupDTO.class), Mockito.any())).thenReturn(null);
-		//Act
+		// Act
 		ResultActions perform = mockMvc.perform(post("/groups").content(mapper.writeValueAsString(groupDTO))
-																.contentType(MediaType.APPLICATION_JSON)
-																.accept(MediaType.APPLICATION_JSON));
-		//Assert
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
+		// Assert
 		perform.andExpect(status().isOk());
 	}
-	
+
 	@Test
 	public void testCreate() throws Exception {
-		//Arrange
+		// Arrange
 		final Group group = new Group();
 		group.setName("name");
 		final GroupDTO groupDTO = new GroupDTO();
@@ -140,34 +141,85 @@ public class GroupControllerTest {
 		Mockito.when(manager.save(group)).thenReturn(group);
 		Mockito.when(dozerMapper.map(group, GroupDTO.class)).thenReturn(groupDTO);
 		Mockito.when(dozerMapper.map(Mockito.any(GroupDTO.class), Mockito.any())).thenReturn(group);
-		//Act
+		// Act
 		ResultActions perform = mockMvc.perform(post("/groups").content(mapper.writeValueAsString(groupDTO))
-																.contentType(MediaType.APPLICATION_JSON)
-																.accept(MediaType.APPLICATION_JSON));
-		//Assert
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
+		// Assert
 		perform.andExpect(status().isOk());
 		perform.andExpect(content().json(mapper.writeValueAsString(groupDTO)));
 	}
-	
+
 	@Test
 	public void testRemove() throws Exception {
-		//Arrange
+		// Arrange
 		final Group group = new Group();
 		Mockito.when(manager.findById(1L)).thenReturn(group);
-		//Act
+		// Act
 		ResultActions perform = mockMvc.perform(delete("/groups/1"));
-		//Assert
+		// Assert
 		perform.andExpect(status().isOk());
 	}
-	
+
 	@Test
 	public void testRemoveNotInDb() throws Exception {
-		//Arrange
+		// Arrange
 		Mockito.when(manager.findById(1L)).thenReturn(null);
-		//Act
+		// Act
 		ResultActions perform = mockMvc.perform(delete("/groups/1"));
+		// Assert
+		perform.andExpect(status().isOk());
+	}
+
+	@Test
+	public void testFindByPersonsId() throws Exception {
+		// Arrange
+		final Group group = new Group();
+		final GroupDTO groupDTO = new GroupDTO();
+		groupDTO.setId(2L);
+		Mockito.when(manager.findByPersonsId(1L)).thenReturn(group);
+		Mockito.when(dozerMapper.map(group, GroupDTO.class)).thenReturn(groupDTO);
+		// Act
+		final ResultActions perform = mockMvc.perform(get("/groups/person/1"));
+		// Assert
+		perform.andExpect(status().isOk());
+		perform.andExpect(content().json(mapper.writeValueAsString(groupDTO)));
+	}
+
+	@Test
+	public void testFindByPersonsIdPersonNotInDb() throws Exception {
+		// Arrange
+		final PersonDTO personDTO = new PersonDTO();
+		personDTO.setId(1L);
+		Mockito.when(manager.findByPersonsId(1L)).thenReturn(null);
+		// Act
+		final ResultActions perform = mockMvc.perform(get("/groups/person/1"));
+		// Assert
+		perform.andExpect(status().isOk());
+	}
+
+	@Test
+	public void testAddPersons() throws Exception {
+		// Arrange
+		final GroupDTO groupDTO = new GroupDTO();
+		final Group group = new Group();
+		final Person person = new Person();
+		final PersonDTO personDTO = new PersonDTO();
+		final PersonDTO personDTOnull = null;
+		final List<Person> personList = new ArrayList<>();
+		personList.add(person);
+		final List<PersonDTO> personDTOlist = new ArrayList<>();
+		personDTOlist.add(personDTO);
+		personDTOlist.add(personDTOnull);
+		Mockito.when(dozerMapper.map(personDTO, Person.class)).thenReturn(person);
+		Mockito.when(dozerMapper.map(group, GroupDTO.class)).thenReturn(groupDTO);
+		Mockito.when(manager.addPersons(Mockito.anyLong(), Mockito.any())).thenReturn(group);
+		// Act
+		final ResultActions perform = mockMvc.perform(post("/groups/1/relate").content(mapper.writeValueAsString(personDTOlist))
+																				.contentType(MediaType.APPLICATION_JSON)
+																				.accept(MediaType.APPLICATION_JSON));
 		//Assert
 		perform.andExpect(status().isOk());
+		perform.andExpect(content().json(mapper.writeValueAsString(groupDTO)));
 	}
 
 }

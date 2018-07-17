@@ -44,5 +44,9 @@ public class GroupManagerImpl extends AbstractManager<Group, Long> implements Gr
 	protected GroupDAO getDAO() {
 		return groupDAO;
 	}
+	
+	public Group findByPersonsId(Long id) {
+		return this.getDAO().findByPersonsId(id);
+	}
 
 }
