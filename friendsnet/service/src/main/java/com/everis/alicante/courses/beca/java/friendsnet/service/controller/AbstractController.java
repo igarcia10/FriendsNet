@@ -23,8 +23,8 @@ public abstract class AbstractController<DTO extends DTOEntity, E extends FNEnti
 	@Autowired
 	protected DozerBeanMapper mapper;
 	
-	Class<E> entityClass;
-	Class<DTO> dtoClass;
+	private Class<E> entityClass;
+	private Class<DTO> dtoClass;
 
 	protected AbstractController(Class<E> entityClass, Class<DTO> dtoClass) {
 		this.entityClass = entityClass;
