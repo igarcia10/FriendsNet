@@ -79,6 +79,7 @@ public class PersonManagerImplTest {
 		// Assert
 		Assert.assertEquals(person, resultPerson);
 		Assert.assertEquals(person.getName(), resultPerson.getName());
+		Mockito.verify(dao, Mockito.times(1)).save(person);
 	}
 
 	@Test
@@ -97,6 +98,7 @@ public class PersonManagerImplTest {
 		// Assert
 		Assert.assertEquals(persons, resultPersons);
 		Assert.assertEquals(persons.get(0).getName(), resultPersons.get(0).getName());
+		Mockito.verify(dao, Mockito.times(1)).saveAll(persons);
 	}
 
 	@Test

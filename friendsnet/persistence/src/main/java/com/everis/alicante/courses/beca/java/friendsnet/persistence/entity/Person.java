@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,23 +33,23 @@ public class Person implements FNEntity {
 	private String surname;
 	private byte[] picture;
 
-	@ManyToMany(mappedBy = "persons")
+	@ManyToMany(mappedBy = "persons", fetch = FetchType.LAZY)
 	private Set<Group> groups = new HashSet<>();
 
-	@ManyToMany(mappedBy = "persons")
+	@ManyToMany(mappedBy = "persons", fetch = FetchType.LAZY)
 	private Set<Event> events = new HashSet<>();
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinTable(name = "person_friends", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
 	private Set<Person> friends;
 
-	@ManyToMany(mappedBy="friends")
+	@ManyToMany(mappedBy="friends", fetch = FetchType.LAZY)
 	private Set<Person> friendOf;
 
-	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Post> posts = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Like> likes = new ArrayList<>();
 	
 	public void addPost(Post post) {

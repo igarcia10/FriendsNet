@@ -82,6 +82,7 @@ public class PostManagerImplTest {
 		// Assert
 		Assert.assertEquals(post, resultPost);
 		Assert.assertEquals(post.getText(), resultPost.getText());
+		Mockito.verify(postDAO, Mockito.times(1)).save(post);
 	}
 
 	@Test
@@ -100,6 +101,7 @@ public class PostManagerImplTest {
 		// Assert
 		Assert.assertEquals(posts, resultPosts);
 		Assert.assertEquals(posts.get(0).getText(), resultPosts.get(0).getText());
+		Mockito.verify(postDAO, Mockito.times(1)).saveAll(posts);
 	}
 
 	@Test

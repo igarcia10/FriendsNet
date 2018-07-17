@@ -77,6 +77,7 @@ public class EventManagerImplTest {
 		// Assert
 		Assert.assertEquals(event, resultEvent);
 		Assert.assertEquals(event.getName(), resultEvent.getName());
+		Mockito.verify(dao, Mockito.times(1)).save(event);
 	}
 
 	@Test
@@ -95,6 +96,7 @@ public class EventManagerImplTest {
 		// Assert
 		Assert.assertEquals(events, resultEvents);
 		Assert.assertEquals(events.get(0).getName(), resultEvents.get(0).getName());
+		Mockito.verify(dao, Mockito.times(1)).saveAll(events);
 	}
 
 	@Test

@@ -22,14 +22,14 @@ import com.everis.alicante.courses.beca.java.friendsnet.service.dto.EventDTO;
 public class EventController {
 
 	@Autowired
-	private EventManagerImpl manager;
+	private EventManagerImpl eventManager;
 
 	@Autowired
 	private DozerBeanMapper mapper;
 
 	@GetMapping
 	public List<EventDTO> getAll() {
-		List<Event> eventList = (List<Event>) manager.findAll();
+		List<Event> eventList = (List<Event>) eventManager.findAll();
 		List<EventDTO> eventDTOList = new ArrayList<>();
 		if (null != eventList) {
 			for (Event event : eventList) {
@@ -41,7 +41,7 @@ public class EventController {
 
 	@GetMapping("/{id}")
 	public EventDTO getById(@PathVariable("id") Long id) {
-		final Event event = manager.findById(id);
+		final Event event = eventManager.findById(id);
 		EventDTO eventDTO = null;
 		if (null != event) {
 			eventDTO = mapper.map(event, EventDTO.class);
@@ -52,6 +52,7 @@ public class EventController {
 	// TODO
 	@GetMapping("/{id}/person/{idperson}/add")
 	public Event addPerson() {
+		
 		return null;
 	}
 
@@ -63,7 +64,7 @@ public class EventController {
 
 	@PostMapping
 	public EventDTO create(@RequestBody EventDTO event) {
-		Event eventDB = manager.save(mapper.map(event, Event.class));
+		Event eventDB = eventManager.save(mapper.map(event, Event.class));
 		EventDTO eventDTO = null;
 		if (null != eventDB) {
 			eventDTO = mapper.map(eventDB, EventDTO.class);
@@ -73,9 +74,9 @@ public class EventController {
 
 	@DeleteMapping("/{id}")
 	public void remove(@PathVariable("id") Long id) {
-		final Event event = manager.findById(id);
+		final Event event = eventManager.findById(id);
 		if (null != event) {
-			manager.remove(event);
+			eventManager.remove(event);
 		}
 	}
 

@@ -84,6 +84,7 @@ public class GroupManagerImplTest {
 		// Assert
 		Assert.assertEquals(group, resultGroup);
 		Assert.assertEquals(group.getName(), resultGroup.getName());
+		Mockito.verify(groupDAO, Mockito.times(1)).save(group);
 	}
 
 	@Test
@@ -102,6 +103,7 @@ public class GroupManagerImplTest {
 		// Assert
 		Assert.assertEquals(groups, resultGroups);
 		Assert.assertEquals(groups.get(0).getName(), resultGroups.get(0).getName());
+		Mockito.verify(groupDAO, Mockito.times(1)).saveAll(groups);
 	}
 
 	@Test
