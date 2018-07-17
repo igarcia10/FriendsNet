@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.everis.alicante.courses.beca.java.friendsnet.core.manager.EventManager;
+import com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation.EventManagerImpl;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Event;
 import com.everis.alicante.courses.beca.java.friendsnet.service.dto.EventDTO;
 
@@ -22,7 +22,7 @@ import com.everis.alicante.courses.beca.java.friendsnet.service.dto.EventDTO;
 public class EventController {
 
 	@Autowired
-	private EventManager manager;
+	private EventManagerImpl manager;
 
 	@Autowired
 	private DozerBeanMapper mapper;

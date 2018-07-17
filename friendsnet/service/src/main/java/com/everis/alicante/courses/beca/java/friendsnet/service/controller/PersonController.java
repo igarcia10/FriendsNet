@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.everis.alicante.courses.beca.java.friendsnet.core.manager.PersonManager;
+import com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation.PersonManagerImpl;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
 import com.everis.alicante.courses.beca.java.friendsnet.service.dto.PersonDTO;
 
@@ -22,7 +22,7 @@ import com.everis.alicante.courses.beca.java.friendsnet.service.dto.PersonDTO;
 public class PersonController {
 
 	@Autowired
-	private PersonManager manager;
+	private PersonManagerImpl manager;
 
 	@Autowired
 	private DozerBeanMapper mapper;

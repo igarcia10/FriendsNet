@@ -2,6 +2,7 @@ package com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementa
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Service;
 
 import com.everis.alicante.courses.beca.java.friendsnet.core.manager.AbstractManager;
 import com.everis.alicante.courses.beca.java.friendsnet.core.manager.PostManager;
@@ -10,6 +11,7 @@ import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PostDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Like;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Post;
 
+@Service
 public class PostManagerImpl extends AbstractManager<Post, Long> implements PostManager {
 
 	@Autowired

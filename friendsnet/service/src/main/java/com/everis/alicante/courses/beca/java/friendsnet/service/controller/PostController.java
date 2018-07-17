@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.everis.alicante.courses.beca.java.friendsnet.core.manager.PostManager;
+import com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation.PostManagerImpl;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Post;
 import com.everis.alicante.courses.beca.java.friendsnet.service.dto.PostDTO;
 
@@ -22,7 +22,7 @@ import com.everis.alicante.courses.beca.java.friendsnet.service.dto.PostDTO;
 public class PostController {
 
 	@Autowired
-	private PostManager manager;
+	private PostManagerImpl manager;
 
 	@Autowired
 	private DozerBeanMapper mapper;

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.everis.alicante.courses.beca.java.friendsnet.core.manager.GroupManager;
+import com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation.GroupManagerImpl;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Group;
 import com.everis.alicante.courses.beca.java.friendsnet.service.dto.GroupDTO;
 
@@ -22,7 +22,7 @@ import com.everis.alicante.courses.beca.java.friendsnet.service.dto.GroupDTO;
 public class GroupController {
 
 	@Autowired
-	private GroupManager manager;
+	private GroupManagerImpl manager;
 
 	@Autowired
 	private DozerBeanMapper mapper;
