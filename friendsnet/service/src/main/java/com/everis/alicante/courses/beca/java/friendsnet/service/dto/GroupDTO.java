@@ -3,8 +3,6 @@ package com.everis.alicante.courses.beca.java.friendsnet.service.dto;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +13,6 @@ public class GroupDTO implements DTOEntity {
 	private Long id;
 	private String name;
 	private byte[] picture;
-	private Set<Person> persons = new HashSet<>();
+	private Set<PersonDTO> persons = new HashSet<>();
 
 }

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Like;
-import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.enums.PostType;
 
 import lombok.Getter;
@@ -20,7 +18,6 @@ public class PostDTO implements DTOEntity {
 	private Date creationDate;
 	private PostType type;
 	private byte[] picture;
-    private Person person;
-	private List<Like> likes = new ArrayList<>();
+	private List<LikeDTO> likes = new ArrayList<>();
 
 }

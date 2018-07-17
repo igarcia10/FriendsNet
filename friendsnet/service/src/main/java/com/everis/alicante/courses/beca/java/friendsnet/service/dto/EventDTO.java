@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.enums.EventType;
 
 import lombok.Getter;
@@ -20,6 +19,6 @@ public class EventDTO implements DTOEntity {
 	private Date endingDate;
 	private EventType type;
 	private byte[] picture;
-	private Set<Person> persons = new HashSet<>();
+	private Set<PersonDTO> persons = new HashSet<>();
 
 }
