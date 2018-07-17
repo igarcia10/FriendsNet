@@ -31,7 +31,7 @@ public abstract class AbstractController<DTO extends DTOEntity, E extends FNEnti
 		this.dtoClass = dtoClass;
 	}
 
-	@GetMapping("/")
+	@GetMapping
 	public List<DTO> getAll() {
 		List<E> eventList = (List<E>) manager.findAll();
 		List<DTO> eventDTOList = new ArrayList<>();
@@ -53,7 +53,7 @@ public abstract class AbstractController<DTO extends DTOEntity, E extends FNEnti
 		return eventDTO;
 	}
 
-	@PostMapping("/")
+	@PostMapping
 	public DTO create(@RequestBody DTO event) {
 		E eventDB = manager.save(mapper.map(event, entityClass));
 		DTO eventDTO = null;
