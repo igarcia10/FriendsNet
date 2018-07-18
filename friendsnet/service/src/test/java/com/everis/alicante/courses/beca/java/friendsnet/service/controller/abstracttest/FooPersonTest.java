@@ -1,4 +1,4 @@
-package com.everis.alicante.courses.beca.java.friendsnet.service.controller;
+package com.everis.alicante.courses.beca.java.friendsnet.service.controller.abstracttest;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

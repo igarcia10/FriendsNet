@@ -169,5 +169,57 @@ public class EventControllerTest {
 		//Assert
 		perform.andExpect(status().isOk());
 	}
+	
+	@Test
+	public void testFindByPersonsId() throws Exception {
+		// Arrange
+		final Event event = new Event();
+		final List<Event> events = new ArrayList<>();
+		events.add(event);
+		final EventDTO eventDTO = new EventDTO();
+		final List<EventDTO> listDTO = new ArrayList<>();
+		listDTO.add(eventDTO);
+		Mockito.when(manager.findByPersonsId(1L)).thenReturn(events);
+		Mockito.when(dozerMapper.map(Mockito.any(), Mockito.any())).thenReturn(eventDTO);
+		// Act
+		final ResultActions perform = mockMvc.perform(get("/events/person/1"));
+		// Assert
+		perform.andExpect(status().isOk());
+		perform.andExpect(content().json(mapper.writeValueAsString(listDTO)));
+	}
+	
+	@Test
+	public void testFindByPersonsIdNull() throws Exception {
+		// Arrange
+		Mockito.when(manager.findByPersonsId(1L)).thenReturn(null);
+		// Act
+		final ResultActions perform = mockMvc.perform(get("/events/person/1"));
+		// Assert
+		perform.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void testAddPerson() throws Exception {
+		//Arrange
+		Event event = new Event();
+		EventDTO eventDTO = new EventDTO();
+		Mockito.when(manager.addPerson(1L, 1L)).thenReturn(event);
+		Mockito.when(dozerMapper.map(event, EventDTO.class)).thenReturn(eventDTO);
+		//Act
+		ResultActions perform = mockMvc.perform(post("/events/1/person/1/add"));
+		//Assert
+		perform.andExpect(status().isOk());
+		perform.andExpect(content().json(mapper.writeValueAsString(eventDTO)));
+	}
+	
+	@Test
+	public void testAddPersonNull() throws Exception {
+		//Arrange
+		Mockito.when(manager.addPerson(1L, 1L)).thenReturn(null);
+		//Act
+		ResultActions perform = mockMvc.perform(post("/events/1/person/1/add"));
+		//Assert
+		perform.andExpect(status().isOk());
+	}
 
 }

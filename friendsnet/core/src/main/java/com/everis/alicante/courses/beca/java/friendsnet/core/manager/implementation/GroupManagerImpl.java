@@ -1,5 +1,7 @@
 package com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +47,7 @@ public class GroupManagerImpl extends AbstractManager<Group, Long> implements Gr
 		return groupDAO;
 	}
 	
-	public Group findByPersonsId(Long id) {
+	public List<Group> findByPersonsId(Long id) {
 		return this.getDAO().findByPersonsId(id);
 	}
 

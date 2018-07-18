@@ -169,5 +169,33 @@ public class PostControllerTest {
 		//Assert
 		perform.andExpect(status().isOk());
 	}
+	
+	@Test
+	public void testFindByPersonsId() throws Exception {
+		// Arrange
+		final Post post = new Post();
+		final List<Post> posts = new ArrayList<>();
+		posts.add(post);
+		final PostDTO postDTO = new PostDTO();
+		final List<PostDTO> listDTO = new ArrayList<>();
+		listDTO.add(postDTO);
+		Mockito.when(manager.findByPersonId(1L)).thenReturn(posts);
+		Mockito.when(dozerMapper.map(Mockito.any(), Mockito.any())).thenReturn(postDTO);
+		// Act
+		final ResultActions perform = mockMvc.perform(get("/posts/person/1"));
+		// Assert
+		perform.andExpect(status().isOk());
+		perform.andExpect(content().json(mapper.writeValueAsString(listDTO)));
+	}
+	
+	@Test
+	public void testFindByPersonIdNull() throws Exception {
+		//Arrange
+		Mockito.when(manager.findByPersonId(1L)).thenReturn(null);
+		//Act
+		ResultActions perform = mockMvc.perform(get("/posts/person/1"));
+		//Assert
+		perform.andExpect(status().isOk());
+	}
 
 }

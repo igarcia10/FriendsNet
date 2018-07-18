@@ -29,8 +29,15 @@ public class GroupController extends AbstractController<GroupDTO, Group, Long> {
 	private GroupManagerImpl manager;
 
 	@GetMapping("/person/{id}")
-	public GroupDTO getByPersonId(@PathVariable("id") Long id) {
-		return mapper.map(manager.findByPersonsId(id), GroupDTO.class);
+	public List<GroupDTO> getByPersonId(@PathVariable("id") Long id) {
+		List<Group> resultList = manager.findByPersonsId(id);
+		List<GroupDTO> listDTO = new ArrayList<>();
+		if (null != resultList) {
+			for (Group group : resultList) {
+				listDTO.add(mapper.map(group, GroupDTO.class));
+			}
+		}
+		return listDTO;
 	}
 
 	@PostMapping("/{id}/relate")

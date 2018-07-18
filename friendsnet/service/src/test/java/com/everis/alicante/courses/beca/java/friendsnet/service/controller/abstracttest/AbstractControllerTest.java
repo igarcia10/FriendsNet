@@ -1,4 +1,4 @@
-package com.everis.alicante.courses.beca.java.friendsnet.service.controller;
+package com.everis.alicante.courses.beca.java.friendsnet.service.controller.abstracttest;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.everis.alicante.courses.beca.java.friendsnet.core.manager.AbstractManager;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.FNEntity;
+import com.everis.alicante.courses.beca.java.friendsnet.service.controller.AbstractController;
 import com.everis.alicante.courses.beca.java.friendsnet.service.dto.DTOEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

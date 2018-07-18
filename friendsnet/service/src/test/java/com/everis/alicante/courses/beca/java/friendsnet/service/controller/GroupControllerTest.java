@@ -174,22 +174,23 @@ public class GroupControllerTest {
 	public void testFindByPersonsId() throws Exception {
 		// Arrange
 		final Group group = new Group();
+		final List<Group> groups = new ArrayList<>();
+		groups.add(group);
 		final GroupDTO groupDTO = new GroupDTO();
-		groupDTO.setId(2L);
-		Mockito.when(manager.findByPersonsId(1L)).thenReturn(group);
-		Mockito.when(dozerMapper.map(group, GroupDTO.class)).thenReturn(groupDTO);
+		final List<GroupDTO> listDTO = new ArrayList<>();
+		listDTO.add(groupDTO);
+		Mockito.when(manager.findByPersonsId(1L)).thenReturn(groups);
+		Mockito.when(dozerMapper.map(Mockito.any(), Mockito.any())).thenReturn(groupDTO);
 		// Act
 		final ResultActions perform = mockMvc.perform(get("/groups/person/1"));
 		// Assert
 		perform.andExpect(status().isOk());
-		perform.andExpect(content().json(mapper.writeValueAsString(groupDTO)));
+		perform.andExpect(content().json(mapper.writeValueAsString(listDTO)));
 	}
 
 	@Test
-	public void testFindByPersonsIdPersonNotInDb() throws Exception {
+	public void testFindByPersonsIdNull() throws Exception {
 		// Arrange
-		final PersonDTO personDTO = new PersonDTO();
-		personDTO.setId(1L);
 		Mockito.when(manager.findByPersonsId(1L)).thenReturn(null);
 		// Act
 		final ResultActions perform = mockMvc.perform(get("/groups/person/1"));
@@ -199,6 +200,31 @@ public class GroupControllerTest {
 
 	@Test
 	public void testAddPersons() throws Exception {
+		// Arrange
+		final GroupDTO groupDTO = new GroupDTO();
+		final Group group = new Group();
+		final Person person = new Person();
+		final PersonDTO personDTO = new PersonDTO();
+		final PersonDTO personDTOnull = null;
+		final List<Person> personList = new ArrayList<>();
+		personList.add(person);
+		final List<PersonDTO> personDTOlist = new ArrayList<>();
+		personDTOlist.add(personDTO);
+		personDTOlist.add(personDTOnull);
+		Mockito.when(dozerMapper.map(personDTO, Person.class)).thenReturn(person);
+		Mockito.when(dozerMapper.map(group, GroupDTO.class)).thenReturn(groupDTO);
+		Mockito.when(manager.addPersons(Mockito.anyLong(), Mockito.any())).thenReturn(group);
+		// Act
+		final ResultActions perform = mockMvc.perform(post("/groups/1/relate").content(mapper.writeValueAsString(personDTOlist))
+																				.contentType(MediaType.APPLICATION_JSON)
+																				.accept(MediaType.APPLICATION_JSON));
+		//Assert
+		perform.andExpect(status().isOk());
+		perform.andExpect(content().json(mapper.writeValueAsString(groupDTO)));
+	}
+	
+	@Test
+	public void testAddPersonsNull() throws Exception {
 		// Arrange
 		final GroupDTO groupDTO = new GroupDTO();
 		final Group group = new Group();
