@@ -12,7 +12,7 @@ import com.everis.alicante.courses.beca.java.friendsnet.service.dto.PersonDTO;
 @WebAppConfiguration
 public class FooPersonTest extends AbstractControllerTest<PersonDTO, Person, Long>{
 
-	protected FooPersonTest() {
+	public FooPersonTest() {
 		super(Person.class, PersonDTO.class, "/persons");
 	}
 	
