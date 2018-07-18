@@ -2,6 +2,7 @@ package com.everis.alicante.courses.beca.java.friendsnet.persistence.entity;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -36,11 +37,11 @@ public class Like implements FNEntity {
 	@Enumerated(EnumType.STRING)
 	private LikeType type;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name = "person_id")
 	private Person person;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name = "post_id")
 	private Post post;
 

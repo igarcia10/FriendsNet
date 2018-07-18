@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.everis.alicante.courses.beca.java.friendsnet.core.manager.AbstractManager;
 import com.everis.alicante.courses.beca.java.friendsnet.core.manager.PostManager;
-import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.LikeDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PersonDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PostDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Like;
@@ -22,23 +21,20 @@ public class PostManagerImpl extends AbstractManager<Post, Long> implements Post
 	private PostDAO postDAO;
 
 	@Autowired
-	private LikeDAO likeDAO;
-	
-	@Autowired
 	private PersonDAO personDAO;
 
 	@Override
-	public Post addLike(final Long id, final Like like) {
-		Post post = postDAO.findById(id).orElse(null);
-		if (null != post && null != like) {
-			Like likeDB = likeDAO.findById(like.getId()).orElse(null);
-			if (null != likeDB) {
-				post.addLike(likeDB);
-				like.setPost(post);
-				likeDAO.save(likeDB);
-				post = postDAO.save(post);
-			}
-		} else {
+	public Post addLike(final Long idPost, Long idPerson) {
+		Post post = postDAO.findById(idPost).orElse(null);
+		Person person = personDAO.findById(idPerson).orElse(null);
+		if (null != post && null != person) {
+			final Like like = new Like();
+			like.setPerson(person);
+			like.setPost(post);
+			post.getLikes().add(like);
+			person.getLikes().add(like);
+			postDAO.save(post);
+		} else if (null == person) {
 			post = null;
 		}
 		return post;
@@ -48,11 +44,11 @@ public class PostManagerImpl extends AbstractManager<Post, Long> implements Post
 	protected CrudRepository<Post, Long> getDAO() {
 		return postDAO;
 	}
-	
+
 	public List<Post> findByPersonId(Long id) {
 		final Person person = personDAO.findById(id).orElse(null);
 		List<Post> posts = null;
-		if(null!=person) {
+		if (null != person) {
 			posts = postDAO.findByPersonId(id);
 		}
 		return posts;

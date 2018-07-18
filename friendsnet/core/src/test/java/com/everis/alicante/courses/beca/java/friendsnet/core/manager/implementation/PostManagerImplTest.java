@@ -15,7 +15,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.LikeDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PersonDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PostDAO;
-import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Like;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Post;
 
@@ -160,22 +159,19 @@ public class PostManagerImplTest {
 	public void testAddLike() {
 		// Arrange
 		final Post post = new Post();
-		final Like like = new Like();
-		like.setId(1L);
-		post.addLike(like);
+		final Person person = new Person();
 		Mockito.when(postDAO.findById(1L)).thenReturn(Optional.of(post));
 		Mockito.when(postDAO.save(post)).thenReturn(post);
-		Mockito.when(likeDAO.findById(1L)).thenReturn(Optional.of(like));
-		Mockito.when(likeDAO.save(like)).thenReturn(like);
+		Mockito.when(personDAO.findById(1L)).thenReturn(Optional.of(person));
 		// Act
-		final Post resultPost = manager.addLike(1L, like);
+		final Post resultPost = manager.addLike(1L, 1L);
 		// Assert
 		Assert.assertEquals(post, resultPost);
-		Assert.assertEquals(post.getLikes().size(), resultPost.getLikes().size());
+		Assert.assertEquals(1, resultPost.getLikes().size());
 	}
 
 	@Test
-	public void testAddLikeNullIdAndLike() {
+	public void testAddLikeNullPostAndPerson() {
 		// Act
 		final Post resultPost = manager.addLike(null, null);
 		// Assert
@@ -183,20 +179,15 @@ public class PostManagerImplTest {
 	}
 
 	@Test
-	public void testAddLikeNullId() {
-		// Arrange
-		final Like like = new Like();
+	public void testAddLikeNullPost() {
 		// Act
-		final Post resultPost = manager.addLike(null, like);
+		final Post resultPost = manager.addLike(null, 1L);
 		// Assert
 		Assert.assertNull(resultPost);
 	}
-
+	
 	@Test
-	public void testAddLikeNullLike() {
-		//Arrange
-		final Post post = new Post();
-		Mockito.when(postDAO.findById(1L)).thenReturn(Optional.of(post));
+	public void testAddLikeNullPerson() {
 		// Act
 		final Post resultPost = manager.addLike(1L, null);
 		// Assert
@@ -206,26 +197,23 @@ public class PostManagerImplTest {
 	@Test
 	public void testAddLikePostNotInDB() {
 		// Arrange
-		final Like like = new Like();
 		Mockito.when(postDAO.findById(1L)).thenReturn(Optional.ofNullable(null));
 		// Act
-		final Post resultPost = manager.addLike(1L, like);
+		final Post resultPost = manager.addLike(1L, 1L);
 		// Assert
 		Assert.assertNull(resultPost);
 	}
-
+	
 	@Test
-	public void testAddLikeLikeNotInDB() {
+	public void testAddLikePersonNotInDB() {
 		// Arrange
 		final Post post = new Post();
-		final Like like = new Like();
-		like.setId(1L);
-		Mockito.when(postDAO.findById(1L)).thenReturn(Optional.of(post));
-		Mockito.when(likeDAO.findById(1L)).thenReturn(Optional.ofNullable(null));
+		Mockito.when(postDAO.findById(1L)).thenReturn(Optional.ofNullable(post));
+		Mockito.when(personDAO.findById(1L)).thenReturn(Optional.ofNullable(null));
 		// Act
-		final Post resultPost = manager.addLike(1L, like);
+		final Post resultPost = manager.addLike(1L, 1L);
 		// Assert
-		Assert.assertNull(resultPost.getPerson());
+		Assert.assertNull(resultPost);
 	}
 	
 	@Test

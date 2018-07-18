@@ -39,7 +39,7 @@ public class Person implements FNEntity {
 	@ManyToMany(mappedBy = "persons", fetch = FetchType.LAZY)
 	private Set<Event> events = new HashSet<>();
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinTable(name = "person_friends", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
 	private Set<Person> friends;
 
