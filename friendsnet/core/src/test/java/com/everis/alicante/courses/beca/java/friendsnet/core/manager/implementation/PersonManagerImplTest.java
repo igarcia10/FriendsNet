@@ -13,140 +13,34 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.repository.CrudRepository;
 
+import com.everis.alicante.courses.beca.java.friendsnet.core.manager.AbstractManager;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PersonDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PersonManagerImplTest {
+public class PersonManagerImplTest extends AbstractManagerTest<Person, Long> {
+
+	public PersonManagerImplTest() {
+		super(Person.class);
+	}
+
+	@Override
+	AbstractManager<Person, Long> getManager() {
+		return manager;
+	}
+
+	@Override
+	CrudRepository<Person, Long> getDAO() {
+		return dao;
+	}
 
 	@InjectMocks
 	private PersonManagerImpl manager;
 
 	@Mock
 	private PersonDAO dao;
-
-	@Test
-	public void testFindAll() {
-		// Arrange
-		final Iterable<Person> iterable = new ArrayList<>();
-		Mockito.when(dao.findAll()).thenReturn(iterable);
-		// Act
-		final Iterable<Person> result = manager.findAll();
-		// Assert
-		Assert.assertEquals(iterable, result);
-	}
-	
-	@Test
-	public void testFindAllNull() {
-		// Arrange
-		Mockito.when(dao.findAll()).thenReturn(null);
-		// Act
-		final Iterable<Person> result = manager.findAll();
-		// Assert
-		Assert.assertNull(result);
-	}
-
-	@Test
-	public void testFindById() {
-		// Arrange
-		final Person person = new Person();
-		Mockito.when(dao.findById(1L)).thenReturn(Optional.of(person));
-		// Act
-		final Person resultPerson = manager.findById(1L);
-		// Assert
-		Assert.assertEquals(person, resultPerson);
-	}
-	
-	@Test
-	public void testFindByIdNull() {
-		// Arrange
-		Mockito.when(dao.findById(1L)).thenReturn(Optional.ofNullable(null));
-		// Act
-		final Person person = manager.findById(1L);
-		//Assert
-		Assert.assertNull(person);
-	}
-
-	@Test
-	public void testSave() {
-		// Arrange
-		final Person person = new Person();
-		person.setName("person1");
-		Mockito.when(dao.save(person)).thenReturn(person);
-		// Act
-		final Person resultPerson = manager.save(person);
-		// Assert
-		Assert.assertEquals(person, resultPerson);
-		Assert.assertEquals(person.getName(), resultPerson.getName());
-		Mockito.verify(dao, Mockito.times(1)).save(person);
-	}
-
-	@Test
-	public void testSaveMultiple() {
-		// Arrange
-		final Person person1 = new Person();
-		person1.setName("person1");
-		final Person person2 = new Person();
-		person2.setName("person2");
-		final List<Person> persons = new ArrayList<>();
-		persons.add(person1);
-		persons.add(person2);
-		Mockito.when(dao.saveAll(persons)).thenReturn(persons);
-		// Act
-		final List<Person> resultPersons = (List<Person>) manager.save(persons);
-		// Assert
-		Assert.assertEquals(persons, resultPersons);
-		Assert.assertEquals(persons.get(0).getName(), resultPersons.get(0).getName());
-		Mockito.verify(dao, Mockito.times(1)).saveAll(persons);
-	}
-
-	@Test
-	public void testUpdate() {
-		// Arrange
-		final Person person = new Person();
-		final Person updatedPerson = new Person();
-		updatedPerson.setName("updatedPerson1");
-		Mockito.when(dao.save(person)).thenReturn(updatedPerson);
-		// Act
-		final Person resultPerson = manager.update(person);
-		// Assert
-		Assert.assertEquals(updatedPerson, resultPerson);
-		Assert.assertEquals(updatedPerson.getName(), resultPerson.getName());
-	}
-
-	@Test
-	public void testUpdateMultiple() {
-		// Arrange
-		final Person person1 = new Person();
-		final Person person2 = new Person();
-		final Person updatedPerson1 = new Person();
-		updatedPerson1.setName("updatedPerson1");
-		final Person updatedPerson2 = new Person();
-		updatedPerson2.setName("updatedPerson2");
-		final List<Person> persons = new ArrayList<>();
-		persons.add(person1);
-		persons.add(person2);
-		final List<Person> updatedPersons = new ArrayList<>();
-		updatedPersons.add(person1);
-		updatedPersons.add(person2);
-		Mockito.when(dao.saveAll(persons)).thenReturn(updatedPersons);
-		// Act
-		final List<Person> resultPersons = (List<Person>) manager.update(persons);
-		// Assert
-		Assert.assertEquals(updatedPersons, resultPersons);
-		Assert.assertEquals(updatedPersons.get(0).getName(), resultPersons.get(0).getName());
-	}
-
-	@Test
-	public void testRemove() {
-		// Arrange
-		final Person person = new Person();
-		// Act
-		manager.remove(person);
-		// Assert
-		Mockito.verify(dao).delete(person);
-	}
 
 	@Test
 	public void testRelatePersons() {

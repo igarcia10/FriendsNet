@@ -13,14 +13,31 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.repository.CrudRepository;
 
+import com.everis.alicante.courses.beca.java.friendsnet.core.manager.AbstractManager;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.GroupDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PersonDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Group;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GroupManagerImplTest {
+public class GroupManagerImplTest extends AbstractManagerTest<Group, Long> {
+
+	public GroupManagerImplTest() {
+		super(Group.class);
+	}
+	
+
+	@Override
+	AbstractManager<Group, Long> getManager() {
+		return manager;
+	}
+
+	@Override
+	CrudRepository<Group, Long> getDAO() {
+		return groupDAO;
+	}
 
 	@InjectMocks
 	private GroupManagerImpl manager;
@@ -30,128 +47,6 @@ public class GroupManagerImplTest {
 
 	@Mock
 	private PersonDAO personDAO;
-
-	@Test
-	public void testFindAll() {
-		// Arrange
-		final Iterable<Group> iterable = new ArrayList<>();
-		Mockito.when(groupDAO.findAll()).thenReturn(iterable);
-		// Act
-		final Iterable<Group> result = manager.findAll();
-		// Assert
-		Assert.assertEquals(iterable, result);
-	}
-
-	@Test
-	public void testFindAllNull() {
-		// Arrange
-		Mockito.when(groupDAO.findAll()).thenReturn(null);
-		// Act
-		final Iterable<Group> result = manager.findAll();
-		// Assert
-		Assert.assertNull(result);
-	}
-
-	@Test
-	public void testFindById() {
-		// Arrange
-		final Group group = new Group();
-		Mockito.when(groupDAO.findById(1L)).thenReturn(Optional.of(group));
-		// Act
-		final Group resultGroup = manager.findById(1L);
-		// Assert
-		Assert.assertEquals(group, resultGroup);
-	}
-
-	@Test
-	public void testFindByIdNull() {
-		// Arrange
-		Mockito.when(groupDAO.findById(1L)).thenReturn(Optional.ofNullable(null));
-		// Act
-		final Group group = manager.findById(1L);
-		// Assert
-		Assert.assertNull(group);
-	}
-
-	@Test
-	public void testSave() {
-		// Arrange
-		final Group group = new Group();
-		group.setName("group1");
-		Mockito.when(groupDAO.save(group)).thenReturn(group);
-		// Act
-		final Group resultGroup = manager.save(group);
-		// Assert
-		Assert.assertEquals(group, resultGroup);
-		Assert.assertEquals(group.getName(), resultGroup.getName());
-		Mockito.verify(groupDAO, Mockito.times(1)).save(group);
-	}
-
-	@Test
-	public void testSaveMultiple() {
-		// Arrange
-		final Group group1 = new Group();
-		group1.setName("group1");
-		final Group group2 = new Group();
-		group2.setName("group2");
-		final List<Group> groups = new ArrayList<>();
-		groups.add(group1);
-		groups.add(group2);
-		Mockito.when(groupDAO.saveAll(groups)).thenReturn(groups);
-		// Act
-		final List<Group> resultGroups = (List<Group>) manager.save(groups);
-		// Assert
-		Assert.assertEquals(groups, resultGroups);
-		Assert.assertEquals(groups.get(0).getName(), resultGroups.get(0).getName());
-		Mockito.verify(groupDAO, Mockito.times(1)).saveAll(groups);
-	}
-
-	@Test
-	public void testUpdate() {
-		// Arrange
-		final Group group = new Group();
-		final Group updatedGroup = new Group();
-		updatedGroup.setName("updatedGroup1");
-		Mockito.when(groupDAO.save(group)).thenReturn(updatedGroup);
-		// Act
-		final Group resultGroup = manager.update(group);
-		// Assert
-		Assert.assertEquals(updatedGroup, resultGroup);
-		Assert.assertEquals(updatedGroup.getName(), resultGroup.getName());
-	}
-
-	@Test
-	public void testUpdateMultiple() {
-		// Arrange
-		final Group group1 = new Group();
-		final Group group2 = new Group();
-		final Group updatedGroup1 = new Group();
-		updatedGroup1.setName("updatedGroup1");
-		final Group updatedGroup2 = new Group();
-		updatedGroup2.setName("updatedGroup2");
-		final List<Group> groups = new ArrayList<>();
-		groups.add(group1);
-		groups.add(group2);
-		final List<Group> updatedGroups = new ArrayList<>();
-		updatedGroups.add(group1);
-		updatedGroups.add(group2);
-		Mockito.when(groupDAO.saveAll(groups)).thenReturn(updatedGroups);
-		// Act
-		final List<Group> resultGroups = (List<Group>) manager.update(groups);
-		// Assert
-		Assert.assertEquals(updatedGroups, resultGroups);
-		Assert.assertEquals(updatedGroups.get(0).getName(), resultGroups.get(0).getName());
-	}
-
-	@Test
-	public void testRemove() {
-		// Arrange
-		final Group group = new Group();
-		// Act
-		manager.remove(group);
-		// Assert
-		Mockito.verify(groupDAO).delete(group);
-	}
 
 	@Test
 	public void testAddPersons() {
