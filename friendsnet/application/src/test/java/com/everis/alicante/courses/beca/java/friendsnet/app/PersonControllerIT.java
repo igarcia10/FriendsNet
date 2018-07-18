@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,6 +55,11 @@ public class PersonControllerIT {
 		this.mapper = new ObjectMapper();
 	}
 
+	@After
+	public void solveH2Shit() {
+		dao.deleteAll();
+	}
+
 	@Test
 	public void testFindAll() throws JSONException {
 		// Act
@@ -97,7 +103,7 @@ public class PersonControllerIT {
 				"{'friends':[{'id': 2, 'name':'name2', 'surname':'surname2'}], 'id': 1, 'name':'name1', 'surname':'surname1'}",
 				response.getBody(), JSONCompareMode.LENIENT);
 	}
-	
+
 	@Test
 	@DatabaseSetup("/db/person/init.xml")
 	public void testRelatePersonNotInDb() throws JSONException {
@@ -113,9 +119,8 @@ public class PersonControllerIT {
 				this.getPostRequest(dtos), String.class);
 
 		// Assert
-		JSONAssert.assertEquals(
-				"{'friends':[{}], 'id': 1, 'name':'name1', 'surname':'surname1'}",
-				response.getBody(), JSONCompareMode.LENIENT);
+		JSONAssert.assertEquals("{'id': 1, 'name':'name1', 'surname':'surname1'}", response.getBody(),
+				JSONCompareMode.LENIENT);
 	}
 
 	private String createURLWithPort(String uri) {
