@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation.PostManagerImpl;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Post;
+import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.enums.LikeType;
 import com.everis.alicante.courses.beca.java.friendsnet.service.dto.PostDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -123,7 +124,7 @@ public class PostControllerTest {
 		Mockito.when(dozerMapper.map(post, PostDTO.class)).thenReturn(null);
 		Mockito.when(dozerMapper.map(Mockito.any(PostDTO.class), Mockito.any())).thenReturn(null);
 		//Act
-		ResultActions perform = mockMvc.perform(post("/posts").content(mapper.writeValueAsString(postDTO))
+		final ResultActions perform = mockMvc.perform(post("/posts").content(mapper.writeValueAsString(postDTO))
 																.contentType(MediaType.APPLICATION_JSON)
 																.accept(MediaType.APPLICATION_JSON));
 		//Assert
@@ -141,7 +142,7 @@ public class PostControllerTest {
 		Mockito.when(dozerMapper.map(post, PostDTO.class)).thenReturn(postDTO);
 		Mockito.when(dozerMapper.map(Mockito.any(PostDTO.class), Mockito.any())).thenReturn(post);
 		//Act
-		ResultActions perform = mockMvc.perform(post("/posts").content(mapper.writeValueAsString(postDTO))
+		final ResultActions perform = mockMvc.perform(post("/posts").content(mapper.writeValueAsString(postDTO))
 																.contentType(MediaType.APPLICATION_JSON)
 																.accept(MediaType.APPLICATION_JSON));
 		//Assert
@@ -155,7 +156,7 @@ public class PostControllerTest {
 		final Post post = new Post();
 		Mockito.when(manager.findById(1L)).thenReturn(post);
 		//Act
-		ResultActions perform = mockMvc.perform(delete("/posts/1"));
+		final ResultActions perform = mockMvc.perform(delete("/posts/1"));
 		//Assert
 		perform.andExpect(status().isOk());
 	}
@@ -165,7 +166,7 @@ public class PostControllerTest {
 		//Arrange
 		Mockito.when(manager.findById(1L)).thenReturn(null);
 		//Act
-		ResultActions perform = mockMvc.perform(delete("/posts/1"));
+		final ResultActions perform = mockMvc.perform(delete("/posts/1"));
 		//Assert
 		perform.andExpect(status().isOk());
 	}
@@ -193,14 +194,33 @@ public class PostControllerTest {
 		//Arrange
 		Mockito.when(manager.findByPersonId(1L)).thenReturn(null);
 		//Act
-		ResultActions perform = mockMvc.perform(get("/posts/person/1"));
+		final ResultActions perform = mockMvc.perform(get("/posts/person/1"));
 		//Assert
 		perform.andExpect(status().isOk());
 	}
 	
 	@Test
 	public void testAddLike() throws Exception {
-		
+		//Arrange
+		final Post post = new Post();
+		final PostDTO postDTO = new PostDTO();
+		Mockito.when(manager.addLike(1L, 1L, LikeType.COOL)).thenReturn(post);
+		Mockito.when(dozerMapper.map(post, PostDTO.class)).thenReturn(postDTO);
+		//Act
+		final ResultActions perform = mockMvc.perform(post("/posts/1/person/1/like/COOL"));
+		//Assert
+		perform.andExpect(status().isOk());
+		perform.andExpect(content().json(mapper.writeValueAsString(postDTO)));
 	}
-
+	
+	@Test
+	public void testAddLikeNull() throws Exception {
+		//Arrange
+		Mockito.when(manager.addLike(1L, 1L, LikeType.COOL)).thenReturn(null);
+		//Act
+		final ResultActions perform = mockMvc.perform(post("/posts/1/person/1/like/COOL"));
+		//Assert
+		perform.andExpect(status().isOk());
+	}
+	
 }
