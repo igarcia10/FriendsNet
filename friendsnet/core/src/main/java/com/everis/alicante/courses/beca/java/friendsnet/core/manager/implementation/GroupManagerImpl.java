@@ -48,7 +48,12 @@ public class GroupManagerImpl extends AbstractManager<Group, Long> implements Gr
 	}
 	
 	public List<Group> findByPersonsId(Long id) {
-		return this.getDAO().findByPersonsId(id);
+		final Person person = personDAO.findById(id).orElse(null);
+		List<Group> groups = null;
+		if(null!=person) {
+			groups = this.getDAO().findByPersonsId(id);
+		}
+		return groups;
 	}
 
 }

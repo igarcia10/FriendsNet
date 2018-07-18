@@ -28,7 +28,12 @@ public class EventManagerImpl extends AbstractManager<Event, Long> implements Ev
 	}
 
 	public List<Event> findByPersonsId(Long id) {
-		return eventDAO.findByPersonsId(id);
+		final Person person = personDAO.findById(id).orElse(null);
+		List<Event> events = null;
+		if(null!=person) {
+			events = eventDAO.findByPersonsId(id);
+		}
+		return events;
 	}
 
 	public Event addPerson(Long id, Long idPerson) {

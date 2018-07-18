@@ -19,28 +19,28 @@ public abstract class AbstractManager<E extends FNEntity, ID> implements Manager
 	}
 
 	@Override
-	public E save(E event) {
-		return this.getDAO().save(event);
+	public E save(E entity) {
+		return this.getDAO().save(entity);
 	}
 
 	@Override
-	public Iterable<E> save(Iterable<E> events) {
-		return this.getDAO().saveAll(events);
+	public Iterable<E> save(Iterable<E> entitys) {
+		return this.getDAO().saveAll(entitys);
 	}
 
 	@Override
-	public E update(E event) {
-		return this.getDAO().save(event);
+	public E update(E entity) {
+		return this.getDAO().save(entity);
 	}
 
 	@Override
-	public Iterable<E> update(Iterable<E> events) {
-		return this.getDAO().saveAll(events);
+	public Iterable<E> update(Iterable<E> entitys) {
+		return this.getDAO().saveAll(entitys);
 	}
 
 	@Override
-	public void remove(E event) {
-		this.getDAO().delete(event);
+	public void remove(E entity) {
+		this.getDAO().delete(entity);
 	}
 
 }

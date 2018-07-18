@@ -253,5 +253,31 @@ public class GroupManagerImplTest {
 		Assert.assertEquals(1, resultGroup.getPersons().size());
 		Mockito.verify(groupDAO, Mockito.times(1)).save(group);
 	}
+	
+	@Test
+	public void testFindByPersonsId() {
+		//Arrange
+		final Person person = new Person();
+		final Group group = new Group();
+		final List<Group> groups = new ArrayList<>();
+		groups.add(group);
+		Mockito.when(personDAO.findById(1L)).thenReturn(Optional.ofNullable(person));
+		Mockito.when(groupDAO.findByPersonsId(1L)).thenReturn(groups);
+		//Act
+		final List<Group> groupsResult = manager.findByPersonsId(1L);
+		//Assert
+		Assert.assertEquals(groups, groupsResult);
+		Assert.assertEquals(1, groupsResult.size());
+	}
+	
+	@Test
+	public void testFindByPersonsIdNullPerson() {
+		//Arrange
+		Mockito.when(personDAO.findById(1L)).thenReturn(Optional.ofNullable(null));
+		//Act
+		final List<Group> groupsResult = manager.findByPersonsId(1L);
+		//Assert
+		Assert.assertNull(groupsResult);
+	}
 
 }

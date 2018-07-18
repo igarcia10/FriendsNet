@@ -13,8 +13,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.LikeDAO;
+import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PersonDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PostDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Like;
+import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Post;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -28,6 +30,9 @@ public class PostManagerImplTest {
 
 	@Mock
 	private LikeDAO likeDAO;
+	
+	@Mock
+	private PersonDAO personDAO;
 
 	@Test
 	public void testFindAll() {
@@ -199,7 +204,7 @@ public class PostManagerImplTest {
 	}
 
 	@Test
-	public void testAddLikeGroupNotInDB() {
+	public void testAddLikePostNotInDB() {
 		// Arrange
 		final Like like = new Like();
 		Mockito.when(postDAO.findById(1L)).thenReturn(Optional.ofNullable(null));
@@ -221,6 +226,32 @@ public class PostManagerImplTest {
 		final Post resultPost = manager.addLike(1L, like);
 		// Assert
 		Assert.assertNull(resultPost.getPerson());
+	}
+	
+	@Test
+	public void testFindByPersonsId() {
+		//Arrange
+		final Person person = new Person();
+		final Post group = new Post();
+		final List<Post> posts = new ArrayList<>();
+		posts.add(group);
+		Mockito.when(personDAO.findById(1L)).thenReturn(Optional.ofNullable(person));
+		Mockito.when(postDAO.findByPersonId(1L)).thenReturn(posts);
+		//Act
+		final List<Post> groupsResult = manager.findByPersonId(1L);
+		//Assert
+		Assert.assertEquals(posts, groupsResult);
+		Assert.assertEquals(1, groupsResult.size());
+	}
+	
+	@Test
+	public void testFindByPersonsIdNullPerson() {
+		//Arrange
+		Mockito.when(personDAO.findById(1L)).thenReturn(Optional.ofNullable(null));
+		//Act
+		final List<Post> postsResult = manager.findByPersonId(1L);
+		//Assert
+		Assert.assertNull(postsResult);
 	}
 
 }
