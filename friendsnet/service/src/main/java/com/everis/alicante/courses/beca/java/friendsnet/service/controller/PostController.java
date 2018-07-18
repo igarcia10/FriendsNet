@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,6 +35,18 @@ public class PostController extends AbstractController<PostDTO, Post, Long> {
 			}
 		}
 		return listDTO;
+	}
+	
+	@PostMapping("/{id}/person/{idperson}/like")
+	public PostDTO addLike(@PathVariable("id") Long id, @PathVariable("idperson") Long idperson) {
+		PostDTO postDTO = new PostDTO();
+//		Like like = new Like();
+//		Post post = manager.findById(id);
+//		if(null!=post) {
+//			post=postManager.addLike(id, like);
+//		}
+		
+		return postDTO;
 	}
 
 }
