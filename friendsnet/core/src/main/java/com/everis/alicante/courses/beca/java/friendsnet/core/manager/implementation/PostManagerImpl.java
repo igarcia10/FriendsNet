@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.everis.alicante.courses.beca.java.friendsnet.core.manager.AbstractManager;
 import com.everis.alicante.courses.beca.java.friendsnet.core.manager.PostManager;
+import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.LikeDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PersonDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PostDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Like;
@@ -24,16 +25,25 @@ public class PostManagerImpl extends AbstractManager<Post, Long> implements Post
 
 	@Autowired
 	private PersonDAO personDAO;
+	
+	@Autowired
+	private LikeDAO likeDAO;
 
 	@Override
 	public Post addLike(final Long idPost, Long idPerson, LikeType type) {
 		Post post = postDAO.findById(idPost).orElse(null);
 		Person person = personDAO.findById(idPerson).orElse(null);
 		if (null != post && null != person) {
-			final Like like = this.createLike(idPost, idPerson, type);
-			post.getLikes().add(like);
-			person.getLikes().add(like);
-			postDAO.save(post);
+			Like like = likeDAO.findByPersonId(idPerson);
+			if(null==like) {
+				like = this.createLike(idPost, idPerson, type);
+				post.getLikes().add(like);
+				person.getLikes().add(like);
+				postDAO.save(post);
+			} else {
+				like.setType(type);
+				likeDAO.save(like);
+			}
 		} else if (null == person) {
 			post = null;
 		}
