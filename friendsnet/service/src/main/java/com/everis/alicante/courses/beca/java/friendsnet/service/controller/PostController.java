@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation.PostManagerImpl;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Post;
+import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.enums.LikeType;
 import com.everis.alicante.courses.beca.java.friendsnet.service.dto.PostDTO;
 
 @RestController
@@ -21,7 +22,7 @@ public class PostController extends AbstractController<PostDTO, Post, Long> {
 	protected PostController() {
 		super(Post.class, PostDTO.class);
 	}
-	
+
 	@Autowired
 	private PostManagerImpl manager;
 
@@ -36,17 +37,10 @@ public class PostController extends AbstractController<PostDTO, Post, Long> {
 		}
 		return listDTO;
 	}
-	
-	@PostMapping("/{id}/person/{idperson}/like")
-	public PostDTO addLike(@PathVariable("id") Long id, @PathVariable("idperson") Long idperson) {
-		PostDTO postDTO = new PostDTO();
-//		Like like = new Like();
-//		Post post = manager.findById(id);
-//		if(null!=post) {
-//			post=postManager.addLike(id, like);
-//		}
-		
-		return postDTO;
+
+	@PostMapping("/{id}/person/{idperson}/like/{liketype}")
+	public PostDTO addLike(@PathVariable("id") Long id, @PathVariable("idperson") Long idperson, @PathVariable("liketype") LikeType type) {
+		return mapper.map(manager.addLike(id, idperson, type), PostDTO.class);
 	}
 
 }

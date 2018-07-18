@@ -1,5 +1,6 @@
 package com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PostDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Like;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Post;
+import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.enums.LikeType;
 
 @Service
 public class PostManagerImpl extends AbstractManager<Post, Long> implements PostManager {
@@ -24,13 +26,11 @@ public class PostManagerImpl extends AbstractManager<Post, Long> implements Post
 	private PersonDAO personDAO;
 
 	@Override
-	public Post addLike(final Long idPost, Long idPerson) {
+	public Post addLike(final Long idPost, Long idPerson, LikeType type) {
 		Post post = postDAO.findById(idPost).orElse(null);
 		Person person = personDAO.findById(idPerson).orElse(null);
 		if (null != post && null != person) {
-			final Like like = new Like();
-			like.setPerson(person);
-			like.setPost(post);
+			final Like like = this.createLike(idPost, idPerson, type);
 			post.getLikes().add(like);
 			person.getLikes().add(like);
 			postDAO.save(post);
@@ -52,6 +52,16 @@ public class PostManagerImpl extends AbstractManager<Post, Long> implements Post
 			posts = postDAO.findByPersonId(id);
 		}
 		return posts;
+	}
+	
+	private Like createLike(Long idPost, Long idPerson, LikeType type) {
+		final Like like = new Like();
+		like.setPost(postDAO.findById(idPost).get());
+		like.setPerson(personDAO.findById(idPerson).get());
+		like.setType(type);
+		Date creationDate = new Date();
+		like.setCreationDate(creationDate);
+		return like;
 	}
 
 }

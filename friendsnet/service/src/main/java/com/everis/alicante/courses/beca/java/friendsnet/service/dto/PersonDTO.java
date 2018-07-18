@@ -1,7 +1,5 @@
 package com.everis.alicante.courses.beca.java.friendsnet.service.dto;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import lombok.Getter;
@@ -16,6 +14,5 @@ public class PersonDTO implements DTOEntity {
 	private String surname;
 	private byte[] picture;
 	private Set<FriendDTO> friends;
-	private List<PostDTO> posts = new ArrayList<>();
 
 }

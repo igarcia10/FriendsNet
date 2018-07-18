@@ -14,7 +14,5 @@ public class LikeDTO implements DTOEntity {
 	private Long id;
 	private Date creationDate;
 	private LikeType type;
-	private PersonDTO person;
-	private PostDTO post;
-
+	
 }

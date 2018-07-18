@@ -46,10 +46,10 @@ public class Person implements FNEntity {
 	@ManyToMany(mappedBy="friends", fetch = FetchType.LAZY)
 	private Set<Person> friendOf;
 
-	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "person", orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Post> posts = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "person", orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Like> likes = new ArrayList<>();
 	
 	public void addPost(Post post) {
