@@ -42,11 +42,11 @@ public class Post implements FNEntity {
 	private PostType type;
 	private byte[] picture;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "person_id")
     private Person person;
 	
-	@OneToMany(mappedBy = "post", orphanRemoval = true, fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	@OneToMany(mappedBy = "post", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	private List<Like> likes = new ArrayList<>();
 	
 	public void addLike(Like like) {
