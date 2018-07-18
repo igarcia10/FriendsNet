@@ -44,7 +44,7 @@ public class PostManagerImpl extends AbstractManager<Post, Long> implements Post
 				like.setType(type);
 				likeDAO.save(like);
 			}
-		} else if (null == person) {
+		} else {
 			post = null;
 		}
 		return post;

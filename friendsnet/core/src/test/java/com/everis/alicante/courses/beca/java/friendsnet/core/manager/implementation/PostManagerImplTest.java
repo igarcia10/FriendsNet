@@ -15,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.LikeDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PersonDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PostDAO;
+import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Like;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Post;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.enums.LikeType;
@@ -157,12 +158,31 @@ public class PostManagerImplTest {
 	}
 
 	@Test
-	public void testAddLike() {
+	public void testAddLikeNewLike() {
 		// Arrange
 		final Post post = new Post();
 		final Person person = new Person();
+		Mockito.when(likeDAO.findByPersonId(1L)).thenReturn(null);
 		Mockito.when(postDAO.findById(1L)).thenReturn(Optional.of(post));
 		Mockito.when(postDAO.save(post)).thenReturn(post);
+		Mockito.when(personDAO.findById(1L)).thenReturn(Optional.of(person));
+		// Act
+		final Post resultPost = manager.addLike(1L, 1L, LikeType.COOL);
+		// Assert
+		Assert.assertEquals(post, resultPost);
+		Assert.assertEquals(1, resultPost.getLikes().size());
+	}
+	
+	@Test
+	public void testAddLikeExistingLike() {
+		// Arrange
+		final Post post = new Post();
+		final Person person = new Person();
+		final Like like = new Like();
+		post.getLikes().add(like);
+		Mockito.when(likeDAO.findByPersonId(1L)).thenReturn(like);
+		Mockito.when(likeDAO.save(like)).thenReturn(like);
+		Mockito.when(postDAO.findById(1L)).thenReturn(Optional.of(post));
 		Mockito.when(personDAO.findById(1L)).thenReturn(Optional.of(person));
 		// Act
 		final Post resultPost = manager.addLike(1L, 1L, LikeType.COOL);

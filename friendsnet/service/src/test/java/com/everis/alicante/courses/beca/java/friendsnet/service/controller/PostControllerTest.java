@@ -197,5 +197,10 @@ public class PostControllerTest {
 		//Assert
 		perform.andExpect(status().isOk());
 	}
+	
+	@Test
+	public void testAddLike() throws Exception {
+		
+	}
 
 }
