@@ -7,7 +7,7 @@ import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Like;
 
 @Repository
 public interface LikeDAO extends CrudRepository<Like, Long> {
-	
+
 	public Like findByPersonId(Long id);
 
 }
