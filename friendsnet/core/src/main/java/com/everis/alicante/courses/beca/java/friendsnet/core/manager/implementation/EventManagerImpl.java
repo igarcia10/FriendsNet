@@ -1,5 +1,6 @@
 package com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.EventDAO
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.PersonDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Event;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
+import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.enums.EventType;
 
 @Service
 public class EventManagerImpl extends AbstractManager<Event, Long> implements EventManager {
@@ -30,7 +32,7 @@ public class EventManagerImpl extends AbstractManager<Event, Long> implements Ev
 	public List<Event> findByPersonsId(Long id) {
 		final Person person = personDAO.findById(id).orElse(null);
 		List<Event> events = null;
-		if(null!=person) {
+		if (null != person) {
 			events = eventDAO.findByPersonsId(id);
 		}
 		return events;
@@ -47,6 +49,16 @@ public class EventManagerImpl extends AbstractManager<Event, Long> implements Ev
 			}
 		}
 		return this.getDAO().save(event);
+	}
+
+	public Event createEvent(String name, Date startingDate, Date endingDate, byte[] picture, EventType type) {
+		final Event event = new Event();
+		event.setName(name);
+		event.setStartingDate(startingDate);
+		event.setEndingDate(endingDate);
+		event.setPicture(picture);
+		event.setType(type);
+		return eventDAO.save(event);
 	}
 
 }

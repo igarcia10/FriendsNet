@@ -33,41 +33,41 @@ public abstract class AbstractController<DTO extends DTOEntity, E extends FNEnti
 
 	@GetMapping
 	public List<DTO> getAll() {
-		List<E> eventList = (List<E>) manager.findAll();
-		List<DTO> eventDTOList = new ArrayList<>();
-		if (null != eventList) {
-			for (E event : eventList) {
-				eventDTOList.add(mapper.map(event, dtoClass));
+		List<E> entityList = (List<E>) manager.findAll();
+		List<DTO> entityDTOList = new ArrayList<>();
+		if (null != entityList) {
+			for (E entity : entityList) {
+				entityDTOList.add(mapper.map(entity, dtoClass));
 			}
 		}
-		return eventDTOList;
+		return entityDTOList;
 	}
 
 	@GetMapping("/{id}")
 	public DTO getById(@PathVariable("id") ID id) {
-		final E event = manager.findById(id);
-		DTO eventDTO = null;
-		if (null != event) {
-			eventDTO = mapper.map(event, dtoClass);
+		final E entity = manager.findById(id);
+		DTO entityDTO = null;
+		if (null != entity) {
+			entityDTO = mapper.map(entity, dtoClass);
 		}
-		return eventDTO;
+		return entityDTO;
 	}
 
 	@PostMapping
-	public DTO create(@RequestBody DTO event) {
-		E eventDB = manager.save(mapper.map(event, entityClass));
-		DTO eventDTO = null;
-		if (null != eventDB) {
-			eventDTO = mapper.map(eventDB, dtoClass);
+	public DTO create(@RequestBody DTO entity) {
+		E entityDB = manager.save(mapper.map(entity, entityClass));
+		DTO entityDTO = null;
+		if (null != entityDB) {
+			entityDTO = mapper.map(entityDB, dtoClass);
 		}
-		return eventDTO;
+		return entityDTO;
 	}
 
 	@DeleteMapping("/{id}")
 	public void remove(@PathVariable("id") ID id) {
-		final E event = manager.findById(id);
-		if (null != event) {
-			manager.remove(event);
+		final E entity = manager.findById(id);
+		if (null != entity) {
+			manager.remove(entity);
 		}
 	}
 

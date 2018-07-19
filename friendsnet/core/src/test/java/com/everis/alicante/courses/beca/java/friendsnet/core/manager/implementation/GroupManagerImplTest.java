@@ -27,7 +27,6 @@ public class GroupManagerImplTest extends AbstractManagerTest<Group, Long> {
 	public GroupManagerImplTest() {
 		super(Group.class);
 	}
-	
 
 	@Override
 	AbstractManager<Group, Long> getManager() {
@@ -86,10 +85,10 @@ public class GroupManagerImplTest extends AbstractManagerTest<Group, Long> {
 		// Assert
 		Assert.assertNull(resultGroup);
 	}
-	
+
 	@Test
 	public void testAddPersonsWithNullId() {
-		//Arrange
+		// Arrange
 		final List<Person> persons = null;
 		// Act
 		final Group resultGroup = manager.addPersons(null, persons);
@@ -126,7 +125,7 @@ public class GroupManagerImplTest extends AbstractManagerTest<Group, Long> {
 		// Assert
 		Assert.assertEquals(1, resultGroup.getPersons().size());
 	}
-	
+
 	@Test
 	public void testAddPersonsWithOnePersonNotInDb() {
 		// Arrange
@@ -148,31 +147,64 @@ public class GroupManagerImplTest extends AbstractManagerTest<Group, Long> {
 		Assert.assertEquals(1, resultGroup.getPersons().size());
 		Mockito.verify(groupDAO, Mockito.times(1)).save(group);
 	}
-	
+
 	@Test
 	public void testFindByPersonsId() {
-		//Arrange
+		// Arrange
 		final Person person = new Person();
 		final Group group = new Group();
 		final List<Group> groups = new ArrayList<>();
 		groups.add(group);
 		Mockito.when(personDAO.findById(1L)).thenReturn(Optional.ofNullable(person));
 		Mockito.when(groupDAO.findByPersonsId(1L)).thenReturn(groups);
-		//Act
+		// Act
 		final List<Group> groupsResult = manager.findByPersonsId(1L);
-		//Assert
+		// Assert
 		Assert.assertEquals(groups, groupsResult);
 		Assert.assertEquals(1, groupsResult.size());
 	}
-	
+
 	@Test
 	public void testFindByPersonsIdNullPerson() {
-		//Arrange
+		// Arrange
 		Mockito.when(personDAO.findById(1L)).thenReturn(Optional.ofNullable(null));
-		//Act
+		// Act
 		final List<Group> groupsResult = manager.findByPersonsId(1L);
-		//Assert
+		// Assert
 		Assert.assertNull(groupsResult);
+	}
+
+	@Test
+	public void testCreateGroup() {
+		// Arrange
+		final Group group = new Group();
+		final byte[] picture = new byte[10];
+		final String name = "name";
+		group.setName("name");
+		group.setPicture(picture);
+		Mockito.when(groupDAO.save(Mockito.any(Group.class))).thenReturn(group);
+		// Act
+		final Group resultGroup = manager.createGroup(name, picture);
+		// Assert
+		Assert.assertEquals(name, resultGroup.getName());
+		Assert.assertEquals(picture, resultGroup.getPicture());
+		Mockito.verify(groupDAO, Mockito.times(1)).save(Mockito.any(Group.class));
+	}
+	
+	@Test
+	public void testCreateGroupNull() {
+		// Arrange
+		final Group group = new Group();
+		final byte[] picture = null;
+		final String name = null;
+		Mockito.when(groupDAO.save(Mockito.any(Group.class))).thenReturn(group);
+		// Act
+		final Group resultGroup = manager.createGroup(name, picture);
+		// Assert
+		Assert.assertEquals(name, resultGroup.getName());
+		Assert.assertEquals(picture, resultGroup.getPicture());
+		Assert.assertNotNull(resultGroup);
+		Mockito.verify(groupDAO, Mockito.times(1)).save(Mockito.any(Group.class));
 	}
 
 }

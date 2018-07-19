@@ -46,14 +46,21 @@ public class GroupManagerImpl extends AbstractManager<Group, Long> implements Gr
 	protected GroupDAO getDAO() {
 		return groupDAO;
 	}
-	
+
 	public List<Group> findByPersonsId(Long id) {
 		final Person person = personDAO.findById(id).orElse(null);
 		List<Group> groups = null;
-		if(null!=person) {
+		if (null != person) {
 			groups = this.getDAO().findByPersonsId(id);
 		}
 		return groups;
+	}
+
+	public Group createGroup(String name, byte[] picture) {
+		final Group group = new Group();
+		group.setName(name);
+		group.setPicture(picture);
+		return groupDAO.save(group);
 	}
 
 }

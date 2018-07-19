@@ -21,6 +21,7 @@ import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Like;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Post;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.enums.LikeType;
+import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.enums.PostType;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PostManagerImplTest extends AbstractManagerTest<Post, Long> {
@@ -28,7 +29,7 @@ public class PostManagerImplTest extends AbstractManagerTest<Post, Long> {
 	public PostManagerImplTest() {
 		super(Post.class);
 	}
-	
+
 	@Override
 	AbstractManager<Post, Long> getManager() {
 		return manager;
@@ -47,7 +48,7 @@ public class PostManagerImplTest extends AbstractManagerTest<Post, Long> {
 
 	@Mock
 	private LikeDAO likeDAO;
-	
+
 	@Mock
 	private PersonDAO personDAO;
 
@@ -66,7 +67,7 @@ public class PostManagerImplTest extends AbstractManagerTest<Post, Long> {
 		Assert.assertEquals(post, resultPost);
 		Assert.assertEquals(1, resultPost.getLikes().size());
 	}
-	
+
 	@Test
 	public void testAddLikeExistingLike() {
 		// Arrange
@@ -100,7 +101,7 @@ public class PostManagerImplTest extends AbstractManagerTest<Post, Long> {
 		// Assert
 		Assert.assertNull(resultPost);
 	}
-	
+
 	@Test
 	public void testAddLikeNullPerson() {
 		// Act
@@ -118,7 +119,7 @@ public class PostManagerImplTest extends AbstractManagerTest<Post, Long> {
 		// Assert
 		Assert.assertNull(resultPost);
 	}
-	
+
 	@Test
 	public void testAddLikePersonNotInDB() {
 		// Arrange
@@ -130,31 +131,68 @@ public class PostManagerImplTest extends AbstractManagerTest<Post, Long> {
 		// Assert
 		Assert.assertNull(resultPost);
 	}
-	
+
 	@Test
 	public void testFindByPersonsId() {
-		//Arrange
+		// Arrange
 		final Person person = new Person();
-		final Post group = new Post();
+		final Post post = new Post();
 		final List<Post> posts = new ArrayList<>();
-		posts.add(group);
+		posts.add(post);
 		Mockito.when(personDAO.findById(1L)).thenReturn(Optional.ofNullable(person));
 		Mockito.when(postDAO.findByPersonId(1L)).thenReturn(posts);
-		//Act
-		final List<Post> groupsResult = manager.findByPersonId(1L);
-		//Assert
-		Assert.assertEquals(posts, groupsResult);
-		Assert.assertEquals(1, groupsResult.size());
+		// Act
+		final List<Post> postsResult = manager.findByPersonId(1L);
+		// Assert
+		Assert.assertEquals(posts, postsResult);
+		Assert.assertEquals(1, postsResult.size());
+	}
+
+	@Test
+	public void testFindByPersonsIdNullPerson() {
+		// Arrange
+		Mockito.when(personDAO.findById(1L)).thenReturn(Optional.ofNullable(null));
+		// Act
+		final List<Post> postsResult = manager.findByPersonId(1L);
+		// Assert
+		Assert.assertNull(postsResult);
+	}
+
+	@Test
+	public void testCreatePost() {
+		// Arrange
+		final Post post = new Post();
+		final byte[] picture = new byte[10];
+		final String text = "text";
+		final PostType type = PostType.BIOGRAPHY;
+		post.setText("text");
+		post.setPicture(picture);
+		post.setType(type);
+		Mockito.when(postDAO.save(Mockito.any(Post.class))).thenReturn(post);
+		// Act
+		final Post resultPost = manager.createPost(text, picture, type);
+		// Assert
+		Assert.assertEquals(text, resultPost.getText());
+		Assert.assertEquals(type, resultPost.getType());
+		Assert.assertEquals(picture, resultPost.getPicture());
+		Mockito.verify(postDAO, Mockito.times(1)).save(Mockito.any(Post.class));
 	}
 	
 	@Test
-	public void testFindByPersonsIdNullPerson() {
-		//Arrange
-		Mockito.when(personDAO.findById(1L)).thenReturn(Optional.ofNullable(null));
-		//Act
-		final List<Post> postsResult = manager.findByPersonId(1L);
-		//Assert
-		Assert.assertNull(postsResult);
+	public void testCreatePostNull() {
+		// Arrange
+		final Post post = new Post();
+		final byte[] picture = null;
+		final String text = null;
+		final PostType type = null;
+		Mockito.when(postDAO.save(Mockito.any(Post.class))).thenReturn(post);
+		// Act
+		final Post resultPost = manager.createPost(text, picture, type);
+		// Assert
+		Assert.assertEquals(text, resultPost.getText());
+		Assert.assertEquals(type, resultPost.getType());
+		Assert.assertEquals(picture, resultPost.getPicture());
+		Mockito.verify(postDAO, Mockito.times(1)).save(Mockito.any(Post.class));
 	}
 
 }

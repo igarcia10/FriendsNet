@@ -41,7 +41,7 @@ public class GroupController extends AbstractController<GroupDTO, Group, Long> {
 	}
 
 	@PostMapping("/{id}/relate")
-	private GroupDTO addPerson(@PathVariable("id") Long id, @RequestBody List<PersonDTO> personsDTO) {
+	public GroupDTO addPerson(@PathVariable("id") Long id, @RequestBody List<PersonDTO> personsDTO) {
 		final List<Person> persons = new ArrayList<>();
 		for (PersonDTO personDTO : personsDTO) {
 			if (null != personDTO) {
@@ -50,5 +50,12 @@ public class GroupController extends AbstractController<GroupDTO, Group, Long> {
 		}
 		return mapper.map(manager.addPersons(id, persons), GroupDTO.class);
 	}
+	
+	@PostMapping("/new")
+	public GroupDTO createGroup(@RequestBody String name, @RequestBody byte[] picture) {
+		final Group group = manager.createGroup(name, picture);
+		return mapper.map(group, GroupDTO.class);
+	}
+	
 
 }
