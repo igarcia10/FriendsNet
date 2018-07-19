@@ -69,7 +69,7 @@ public abstract class AbstractControllerIT<DTO extends DTOEntity, E extends FNEn
 	}
 
 	@Test
-	@DatabaseSetup("/db/abstract/init.xml")
+	@DatabaseSetup("/db/init.xml")
 	public void testFindAllWithContent() throws JSONException {
 		// Act
 		ResponseEntity<String> response = restTemplate.exchange(createURLWithPort(URI), HttpMethod.GET, null,
@@ -80,7 +80,7 @@ public abstract class AbstractControllerIT<DTO extends DTOEntity, E extends FNEn
 	}
 
 	@Test
-	@DatabaseSetup("/db/abstract/init.xml")
+	@DatabaseSetup("/db/init.xml")
 	public void testFindById() throws JSONException {
 		// Act
 		ResponseEntity<String> response = restTemplate.exchange(createURLWithPort(URI + "/1"), HttpMethod.GET, null,
@@ -91,7 +91,7 @@ public abstract class AbstractControllerIT<DTO extends DTOEntity, E extends FNEn
 	}
 
 	@Test
-	@DatabaseSetup("/db/abstract/init.xml")
+	@DatabaseSetup("/db/init.xml")
 	public void testFindByIdNotInDb() throws JSONException {
 		// Act
 		ResponseEntity<String> response = restTemplate.exchange(createURLWithPort(URI + "/3"), HttpMethod.GET, null,
@@ -102,7 +102,7 @@ public abstract class AbstractControllerIT<DTO extends DTOEntity, E extends FNEn
 	}
 
 	@Test
-	@DatabaseSetup("/db/abstract/init.xml")
+	@DatabaseSetup("/db/init.xml")
 	public void testCreate() throws Exception {
 		//Arrange
 		DTO dto = dtoClass.newInstance();
@@ -116,7 +116,7 @@ public abstract class AbstractControllerIT<DTO extends DTOEntity, E extends FNEn
 	}
 	
 	@Test
-	@DatabaseSetup("/db/abstract/init.xml")
+	@DatabaseSetup("/db/init.xml")
 	public void testCreateNull() throws Exception {
 		//Arrange
 		DTO dto = null;
@@ -130,7 +130,7 @@ public abstract class AbstractControllerIT<DTO extends DTOEntity, E extends FNEn
 	}
 	
 	@Test
-	@DatabaseSetup("/db/abstract/init.xml")
+	@DatabaseSetup("/db/init.xml")
 	public void testRemove() throws JSONException {
 		//Arrange
 		final Long counter = this.getDAO().count();
@@ -142,7 +142,7 @@ public abstract class AbstractControllerIT<DTO extends DTOEntity, E extends FNEn
 	}
 	
 	@Test
-	@DatabaseSetup("/db/abstract/init.xml")
+	@DatabaseSetup("/db/init.xml")
 	public void testRemoveNotInDb() throws JSONException {
 		//Arrange
 		final Long counter = this.getDAO().count();

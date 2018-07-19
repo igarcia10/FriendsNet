@@ -75,14 +75,14 @@ public class PostManagerImpl extends AbstractManager<Post, Long> implements Post
 		return like;
 	}
 
-	public Post createPost(String text, byte[] picture, PostType type) {
-		final Post post = new Post();
+	public Post createPost(Post post, byte[] picture, PostType type) {
+		final Post postDB = new Post();
 		final Date creationDate = new Date();
-		post.setCreationDate(creationDate);
-		post.setType(type);
-		post.setText(text);
-		post.setPicture(picture);
-		return postDAO.save(post);
+		postDB.setCreationDate(creationDate);
+		postDB.setType(type);
+		postDB.setText(post.getText());
+		postDB.setPicture(picture);
+		return postDAO.save(postDB);
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ public class EventManagerImpl extends AbstractManager<Event, Long> implements Ev
 		return eventDAO;
 	}
 
-	public List<Event> findByPersonsId(Long id) {
+	public List<Event> findByPersonsId(final Long id) {
 		final Person person = personDAO.findById(id).orElse(null);
 		List<Event> events = null;
 		if (null != person) {
@@ -38,7 +37,7 @@ public class EventManagerImpl extends AbstractManager<Event, Long> implements Ev
 		return events;
 	}
 
-	public Event addPerson(Long id, Long idPerson) {
+	public Event addPerson(final Long id, final Long idPerson) {
 		Event event = this.getDAO().findById(id).orElse(null);
 		if (null != event) {
 			Person person = personDAO.findById(id).orElse(null);
@@ -51,14 +50,14 @@ public class EventManagerImpl extends AbstractManager<Event, Long> implements Ev
 		return this.getDAO().save(event);
 	}
 
-	public Event createEvent(String name, Date startingDate, Date endingDate, byte[] picture, EventType type) {
-		final Event event = new Event();
-		event.setName(name);
-		event.setStartingDate(startingDate);
-		event.setEndingDate(endingDate);
-		event.setPicture(picture);
+	public Event createEvent(final Event event, final byte[] picture, final EventType type) {
+		final Event eventDB = new Event();
+		event.setName(event.getName());
+		event.setStartingDate(event.getStartingDate());
+		event.setEndingDate(event.getEndingDate());
 		event.setType(type);
-		return eventDAO.save(event);
+		event.setPicture(picture);
+		return eventDAO.save(eventDB);
 	}
 
 }

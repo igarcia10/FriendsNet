@@ -47,7 +47,7 @@ public class PersonControllerIT extends AbstractControllerIT<PersonDTO, Person, 
 	}
 	
 	@Test
-	@DatabaseSetup("/db/person/init.xml")
+	@DatabaseSetup("/db/init.xml")
 	public void testRelate() throws JSONException {
 		// Arrange
 		List<PersonDTO> dtos = new ArrayList<>();
@@ -69,7 +69,7 @@ public class PersonControllerIT extends AbstractControllerIT<PersonDTO, Person, 
 	}
 
 	@Test
-	@DatabaseSetup("/db/person/init.xml")
+	@DatabaseSetup("/db/init.xml")
 	public void testRelateNull() throws JSONException {
 		// Arrange
 		List<PersonDTO> dtos = new ArrayList<>();
@@ -83,7 +83,7 @@ public class PersonControllerIT extends AbstractControllerIT<PersonDTO, Person, 
 	}
 
 	@Test
-	@DatabaseSetup("/db/person/init.xml")
+	@DatabaseSetup("/db/init.xml")
 	public void testRelatePersonNotInDb() throws JSONException {
 		// Arrange
 		List<PersonDTO> dtos = new ArrayList<>();
@@ -101,7 +101,7 @@ public class PersonControllerIT extends AbstractControllerIT<PersonDTO, Person, 
 	}
 
 	@Test
-	@DatabaseSetup("/db/person/init.xml")
+	@DatabaseSetup("/db/init.xml")
 	public void testRelateFriendsNotInDb() throws JSONException {
 		// Arrange
 		List<PersonDTO> dtos = new ArrayList<>();
@@ -120,7 +120,7 @@ public class PersonControllerIT extends AbstractControllerIT<PersonDTO, Person, 
 	}
 
 	@Test
-	@DatabaseSetup("/db/person/init.xml")
+	@DatabaseSetup("/db/init.xml")
 	public void testRelateFriendNotInDb() throws JSONException {
 		// Arrange
 		List<PersonDTO> dtos = new ArrayList<>();

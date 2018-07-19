@@ -164,30 +164,32 @@ public class PostManagerImplTest extends AbstractManagerTest<Post, Long> {
 		final Post post = new Post();
 		final byte[] picture = new byte[10];
 		final String text = "text";
+		post.setText(text);
 		final PostType type = PostType.BIOGRAPHY;
 		post.setText("text");
 		post.setPicture(picture);
 		post.setType(type);
 		Mockito.when(postDAO.save(Mockito.any(Post.class))).thenReturn(post);
 		// Act
-		final Post resultPost = manager.createPost(text, picture, type);
+		final Post resultPost = manager.createPost(post, picture, type);
 		// Assert
 		Assert.assertEquals(text, resultPost.getText());
 		Assert.assertEquals(type, resultPost.getType());
 		Assert.assertEquals(picture, resultPost.getPicture());
 		Mockito.verify(postDAO, Mockito.times(1)).save(Mockito.any(Post.class));
 	}
-	
+
 	@Test
 	public void testCreatePostNull() {
 		// Arrange
 		final Post post = new Post();
 		final byte[] picture = null;
 		final String text = null;
+		post.setText(text);
 		final PostType type = null;
 		Mockito.when(postDAO.save(Mockito.any(Post.class))).thenReturn(post);
 		// Act
-		final Post resultPost = manager.createPost(text, picture, type);
+		final Post resultPost = manager.createPost(post, picture, type);
 		// Assert
 		Assert.assertEquals(text, resultPost.getText());
 		Assert.assertEquals(type, resultPost.getType());

@@ -121,14 +121,12 @@ public class EventManagerImplTest extends AbstractManagerTest<Event, Long> {
 		final String name = "name";
 		final byte[] picture = new byte[10];
 		final EventType type = EventType.PARTY;
-		event.setName("name");
+		event.setName(name);
 		event.setStartingDate(date);
 		event.setEndingDate(date);
-		event.setPicture(picture);
-		event.setType(EventType.PARTY);
 		Mockito.when(eventDAO.save(Mockito.any(Event.class))).thenReturn(event);
 		//Act
-		final Event resultEvent = manager.createEvent(name, date, date, picture, type);
+		final Event resultEvent = manager.createEvent(event, picture, type);
 		//Assert
 		Assert.assertEquals(name, resultEvent.getName());
 		Assert.assertEquals(date, resultEvent.getStartingDate());
@@ -147,9 +145,12 @@ public class EventManagerImplTest extends AbstractManagerTest<Event, Long> {
 		final Date endingDate = null;
 		final byte[] picture = null;
 		final EventType type = null;
+		event.setName(name);
+		event.setStartingDate(startingDate);
+		event.setEndingDate(endingDate);
 		Mockito.when(eventDAO.save(Mockito.any(Event.class))).thenReturn(event);
 		//Act
-		final Event resultEvent = manager.createEvent(name, startingDate, endingDate, picture, type);
+		final Event resultEvent = manager.createEvent(event, picture, type);
 		//Assert
 		Assert.assertEquals(name, resultEvent.getName());
 		Assert.assertEquals(startingDate, resultEvent.getStartingDate());
