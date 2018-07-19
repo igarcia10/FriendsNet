@@ -10,4 +10,7 @@
 	
 	<post_table id="1" text="text1" />
 	<post_table id="2" text="text2" person_id="2" />
+	
+	<group_table id="1" name="name1" />
+	<group_table id="2" name="name2" />
 </dataset>
