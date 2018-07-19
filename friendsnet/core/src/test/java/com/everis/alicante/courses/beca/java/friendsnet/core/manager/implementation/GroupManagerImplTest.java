@@ -180,11 +180,11 @@ public class GroupManagerImplTest extends AbstractManagerTest<Group, Long> {
 		final Group group = new Group();
 		final byte[] picture = new byte[10];
 		final String name = "name";
-		group.setName("name");
+		group.setName(name);
 		group.setPicture(picture);
 		Mockito.when(groupDAO.save(Mockito.any(Group.class))).thenReturn(group);
 		// Act
-		final Group resultGroup = manager.createGroup(name, picture);
+		final Group resultGroup = manager.createGroup(group, picture);
 		// Assert
 		Assert.assertEquals(name, resultGroup.getName());
 		Assert.assertEquals(picture, resultGroup.getPicture());
@@ -197,9 +197,10 @@ public class GroupManagerImplTest extends AbstractManagerTest<Group, Long> {
 		final Group group = new Group();
 		final byte[] picture = null;
 		final String name = null;
+		group.setName(name);
 		Mockito.when(groupDAO.save(Mockito.any(Group.class))).thenReturn(group);
 		// Act
-		final Group resultGroup = manager.createGroup(name, picture);
+		final Group resultGroup = manager.createGroup(group, picture);
 		// Assert
 		Assert.assertEquals(name, resultGroup.getName());
 		Assert.assertEquals(picture, resultGroup.getPicture());

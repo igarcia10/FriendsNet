@@ -56,11 +56,11 @@ public class GroupManagerImpl extends AbstractManager<Group, Long> implements Gr
 		return groups;
 	}
 
-	public Group createGroup(String name, byte[] picture) {
-		final Group group = new Group();
-		group.setName(name);
-		group.setPicture(picture);
-		return groupDAO.save(group);
+	public Group createGroup(Group group, byte[] picture) {
+		final Group groupDB = new Group();
+		groupDB.setName(group.getName());
+		groupDB.setPicture(picture);
+		return groupDAO.save(groupDB);
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,9 +52,9 @@ public class GroupController extends AbstractController<GroupDTO, Group, Long> {
 		return mapper.map(manager.addPersons(id, persons), GroupDTO.class);
 	}
 	
-	@PostMapping("/new")
-	public GroupDTO createGroup(@RequestBody String name, @RequestBody(required=false) byte[] picture) {
-		return mapper.map(manager.createGroup(name, picture), GroupDTO.class);
+	@PostMapping(value="/new", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+	public GroupDTO createGroup(@RequestBody GroupDTO groupDTO, @RequestBody(required=false) byte[] picture) {
+		return mapper.map(manager.createGroup(mapper.map(groupDTO, Group.class), picture), GroupDTO.class);
 	}
 	
 
