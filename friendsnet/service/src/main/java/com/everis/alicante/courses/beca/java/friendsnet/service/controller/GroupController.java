@@ -52,9 +52,8 @@ public class GroupController extends AbstractController<GroupDTO, Group, Long> {
 	}
 	
 	@PostMapping("/new")
-	public GroupDTO createGroup(@RequestBody String name, @RequestBody byte[] picture) {
-		final Group group = manager.createGroup(name, picture);
-		return mapper.map(group, GroupDTO.class);
+	public GroupDTO createGroup(@RequestBody String name, @RequestBody(required=false) byte[] picture) {
+		return mapper.map(manager.createGroup(name, picture), GroupDTO.class);
 	}
 	
 

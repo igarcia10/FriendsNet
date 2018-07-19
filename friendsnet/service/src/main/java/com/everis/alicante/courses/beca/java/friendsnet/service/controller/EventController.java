@@ -45,11 +45,10 @@ public class EventController extends AbstractController<EventDTO, Event, Long> {
 		return listDTO;
 	}
 
-	@PostMapping("/{eventtype}")
+	@PostMapping("/new/{eventtype}")
 	public EventDTO createEvent(@RequestBody String name, @RequestBody Date startingDate, @RequestBody Date endDate,
-			@RequestBody byte[] picture, @PathVariable("eventtype") EventType type) {
-		final Event event = manager.createEvent(name, startingDate, endDate, picture, type);
-		return mapper.map(event, EventDTO.class);
+			@RequestBody(required=false) byte[] picture , @PathVariable("eventtype") EventType type) {
+		return mapper.map(manager.createEvent(name, startingDate, endDate, picture, type), EventDTO.class);
 	}
 
 }

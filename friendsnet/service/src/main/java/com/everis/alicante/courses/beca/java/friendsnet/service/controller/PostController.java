@@ -46,10 +46,9 @@ public class PostController extends AbstractController<PostDTO, Post, Long> {
 		return mapper.map(manager.addLike(id, idperson, type), PostDTO.class);
 	}
 	
-	@PostMapping("/{posttype}")
-	public PostDTO createPost(@RequestBody String text, @RequestBody byte[] picture, @PathVariable("posttype") PostType type) {
-		final Post postDB = manager.createPost(text, picture, type);
-		return mapper.map(postDB, PostDTO.class);
+	@PostMapping("/new/{posttype}")
+	public PostDTO createPost(@RequestBody String text, @RequestBody(required=false) byte[] picture, @PathVariable("posttype") PostType type) {
+		return mapper.map(manager.createPost(text, picture, type), PostDTO.class);
 	}
 
 }

@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.ResultActions;
@@ -92,9 +93,45 @@ public class PostControllerTest extends AbstractControllerTest<PostDTO, Post, Lo
 	@Test
 	public void testAddLikeNull() throws Exception {
 		//Arrange
-		Mockito.when(manager.addLike(1L, 1L, LikeType.COOL)).thenReturn(null);
+		Mockito.when(manager.addLike(1L, 1L, LikeType.DONTCARE)).thenReturn(null);
 		//Act
 		final ResultActions perform = mockMvc.perform(post("/posts/1/person/1/like/COOL"));
+		//Assert
+		perform.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void testCreatePost() throws Exception {
+		//Arrange
+		final Post post = new Post();
+		final PostDTO postDTO = new PostDTO();
+		final String text = "text";
+		final byte[] picture = new byte[10];
+		Mockito.when(manager.createPost(Mockito.anyString(), Mockito.any(), Mockito.any())).thenReturn(post);
+		Mockito.when(dozerMapper.map(Mockito.any(Post.class), Mockito.any())).thenReturn(postDTO);
+		//Act
+		final ResultActions perform = mockMvc.perform(post("/posts/new/STATUS").content(mapper.writeValueAsString(text))
+																			.content(mapper.writeValueAsBytes(picture))
+																			.contentType(MediaType.APPLICATION_JSON)
+																			.accept(MediaType.APPLICATION_JSON));
+		//Assert
+		perform.andExpect(status().isOk());
+		perform.andExpect(content().json(mapper.writeValueAsString(postDTO)));
+	}
+	
+	@Test
+	public void testCreatePostNull() throws Exception {
+		//Arrange
+		final PostDTO postDTO = new PostDTO();
+		final String text = "text";
+		final byte[] picture = new byte[10];
+		Mockito.when(manager.createPost(Mockito.anyString(), Mockito.any(), Mockito.any())).thenReturn(null);
+		Mockito.when(dozerMapper.map(Mockito.any(Post.class), Mockito.any())).thenReturn(postDTO);
+		//Act
+		final ResultActions perform = mockMvc.perform(post("/posts/new/STATUS").content(mapper.writeValueAsString(text))
+																			.content(mapper.writeValueAsBytes(picture))
+																			.contentType(MediaType.APPLICATION_JSON)
+																			.accept(MediaType.APPLICATION_JSON));
 		//Assert
 		perform.andExpect(status().isOk());
 	}
