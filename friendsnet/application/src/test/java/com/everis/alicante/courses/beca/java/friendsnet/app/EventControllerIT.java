@@ -86,28 +86,4 @@ public class EventControllerIT extends AbstractControllerIT<EventDTO, Event, Lon
 		JSONAssert.assertEquals("[]", response.getBody(), JSONCompareMode.LENIENT);
 	}
 
-	//TODO try with POSTman or with AdvancesRestClient
-//	@Test
-//	@DatabaseSetup("/db/init.xml")
-//	public void testCreateEvent() throws JSONException {
-//		// Arrange
-//		final Long counter = dao.count();
-//		final String name = "event3";
-//		final Date startingDate = new Date();
-//		final Date endingDate = new Date();
-//		final EventDTO body = new EventDTO();
-//		body.setName(name);
-//		body.setStartingDate(startingDate);
-//		body.setEndingDate(endingDate);
-//		// Act
-//		@SuppressWarnings("unused")
-//		ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/events/new/PARTY"), HttpMethod.POST,
-//				this.getPostRequest(body), String.class);
-//		// Assert
-////		JSONAssert.assertEquals(
-////				"{'id': 1, 'name':'event1', 'startingDate':'2018-07-19T15:51:58.678Z', 'endingDate':'2018-07-19T15:51:58.678Z', 'type': 'PARTY'}",
-////				response.getBody(), JSONCompareMode.LENIENT);
-//		Assert.assertEquals(counter+1, dao.count());
-//	}
-
 }

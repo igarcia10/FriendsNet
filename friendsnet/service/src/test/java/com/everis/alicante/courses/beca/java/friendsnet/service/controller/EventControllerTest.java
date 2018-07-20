@@ -97,53 +97,5 @@ public class EventControllerTest extends AbstractControllerTest<EventDTO, Event,
 		//Assert
 		perform.andExpect(status().isOk());
 	}
-	
-	//TODO Check with POSTMan or AdvancedRestClient
-//	@Test
-//	public void testCreateEvent() throws Exception {
-//		//Arrange
-//		final Event event = new Event();
-//		final EventDTO eventDTO = new EventDTO();
-//		final String name = "name";
-//		final Date startingDate = new Date();
-//		final Date endingDate = new Date();
-////		final byte[] picture = new byte[10];
-//		eventDTO.setName(name);
-//		eventDTO.setStartingDate(startingDate);
-//		eventDTO.setEndingDate(endingDate);
-//		Mockito.when(manager.createEvent(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(event);
-//		Mockito.when(dozerMapper.map(Mockito.any(Event.class), Mockito.any())).thenReturn(eventDTO);
-//		//Act
-//		final ResultActions perform = mockMvc.perform(post("/events/new/PARTY").content(mapper.writeValueAsString(eventDTO))
-////																				.content(mapper.writeValueAsBytes(picture))
-//																				.contentType(MediaType.APPLICATION_JSON)
-//																				.accept(MediaType.APPLICATION_JSON));
-//		//Assert
-//		perform.andExpect(status().isOk());
-//		perform.andExpect(content().json(mapper.writeValueAsString(eventDTO)));
-//	}
-	
-	//TODO Check with POSTMan or AdvancedRestClient
-//	@Test
-//	public void testCreateEventNull() throws Exception {
-//		//Arrange
-//		final EventDTO eventDTO = new EventDTO();
-//		final String name = "name";
-//		final Date startingDate = new Date();
-//		final Date endingDate = new Date();
-////		final byte[] picture = new byte[10];
-//		eventDTO.setName(name);
-//		eventDTO.setStartingDate(startingDate);
-//		eventDTO.setEndingDate(endingDate);
-//		Mockito.when(manager.createEvent(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(null);
-//		Mockito.when(dozerMapper.map(Mockito.any(Event.class), Mockito.any())).thenReturn(eventDTO);
-//		//Act
-//		final ResultActions perform = mockMvc.perform(post("/events/new/GENERAL").content(mapper.writeValueAsString(eventDTO))
-////																				.content(mapper.writeValueAsBytes(picture))
-//																				.contentType(MediaType.APPLICATION_JSON)
-//																				.accept(MediaType.APPLICATION_JSON));
-//		//Assert
-//		perform.andExpect(status().isOk());
-//	}
 
 }
