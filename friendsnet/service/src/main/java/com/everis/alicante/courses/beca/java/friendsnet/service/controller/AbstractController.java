@@ -1,7 +1,7 @@
 package com.everis.alicante.courses.beca.java.friendsnet.service.controller;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +16,13 @@ import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.FNEnt
 import com.everis.alicante.courses.beca.java.friendsnet.service.dto.DTOEntity;
 
 public abstract class AbstractController<DTO extends DTOEntity, E extends FNEntity, ID> {
-	
+
 	@Autowired
 	private AbstractManager<E, ID> manager;
 
 	@Autowired
 	protected DozerBeanMapper mapper;
-	
+
 	private Class<E> entityClass;
 	private Class<DTO> dtoClass;
 
@@ -34,13 +34,10 @@ public abstract class AbstractController<DTO extends DTOEntity, E extends FNEnti
 	@GetMapping
 	public List<DTO> getAll() {
 		List<E> entityList = (List<E>) manager.findAll();
-		List<DTO> entityDTOList = new ArrayList<>();
-		if (null != entityList) {
-			for (E entity : entityList) {
-				entityDTOList.add(mapper.map(entity, dtoClass));
-			}
-		}
-		return entityDTOList;
+
+		return entityList.stream()
+						.map(e -> mapper.map(e, dtoClass))
+						.collect(Collectors.toList());
 	}
 
 	@GetMapping("/{id}")
