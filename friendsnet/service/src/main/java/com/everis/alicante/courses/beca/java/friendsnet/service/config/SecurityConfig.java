@@ -13,7 +13,13 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui.html",
             "/v2/api-docs",
             "/webjars/**",
-            "/**"
+            "/persons",
+            "/persons/**",
+            "/persons/**/relate",
+            "/posts",
+            "/posts/person/**",
+            "/posts/**/person/**/like/**"
+            
     };
     
     @Override
