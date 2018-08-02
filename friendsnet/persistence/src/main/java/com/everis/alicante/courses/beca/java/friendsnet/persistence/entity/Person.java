@@ -32,6 +32,7 @@ public class Person implements FNEntity {
 	private String name;
 	private String surname;
 	private byte[] picture;
+	private String bio;
 
 	@ManyToMany(mappedBy = "persons", fetch = FetchType.LAZY)
 	private Set<Group> groups = new HashSet<>();

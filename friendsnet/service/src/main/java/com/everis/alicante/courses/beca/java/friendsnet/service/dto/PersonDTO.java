@@ -14,5 +14,6 @@ public class PersonDTO implements DTOEntity {
 	private String surname;
 	private byte[] picture;
 	private Set<FriendDTO> friends;
+	private String bio;
 
 }
