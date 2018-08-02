@@ -19,8 +19,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers("/**/*").denyAll();
+                .antMatchers(AUTH_WHITELIST).permitAll();
     }
 }
 
