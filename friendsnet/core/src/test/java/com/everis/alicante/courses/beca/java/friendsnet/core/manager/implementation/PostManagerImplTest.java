@@ -57,7 +57,7 @@ public class PostManagerImplTest extends AbstractManagerTest<Post, Long> {
 		// Arrange
 		final Post post = new Post();
 		final Person person = new Person();
-		Mockito.when(likeDAO.findByPersonId(1L)).thenReturn(null);
+		Mockito.when(likeDAO.findByPersonIdAndPostId(1L, 1L)).thenReturn(null);
 		Mockito.when(postDAO.findById(1L)).thenReturn(Optional.of(post));
 		Mockito.when(postDAO.save(post)).thenReturn(post);
 		Mockito.when(personDAO.findById(1L)).thenReturn(Optional.of(person));
@@ -75,7 +75,7 @@ public class PostManagerImplTest extends AbstractManagerTest<Post, Long> {
 		final Person person = new Person();
 		final Like like = new Like();
 		post.getLikes().add(like);
-		Mockito.when(likeDAO.findByPersonId(1L)).thenReturn(like);
+		Mockito.when(likeDAO.findByPersonIdAndPostId(1L, 1L)).thenReturn(like);
 		Mockito.when(likeDAO.save(like)).thenReturn(like);
 		Mockito.when(postDAO.findById(1L)).thenReturn(Optional.of(post));
 		Mockito.when(personDAO.findById(1L)).thenReturn(Optional.of(person));
