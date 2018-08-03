@@ -23,7 +23,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "order_table")
+@Table(name = "like_table")
 public class Like implements FNEntity {
 
 	@Id
