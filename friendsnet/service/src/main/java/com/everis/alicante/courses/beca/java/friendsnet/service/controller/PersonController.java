@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementat
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
 import com.everis.alicante.courses.beca.java.friendsnet.service.dto.PersonDTO;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/persons")
 public class PersonController extends AbstractController<PersonDTO, Person, Long> {
@@ -34,6 +36,16 @@ public class PersonController extends AbstractController<PersonDTO, Person, Long
 				}
 			}
 		return mapper.map(manager.relatePersons(id, friends), PersonDTO.class);
+	}
+	
+	@PostMapping("/{id}")
+	public PersonDTO putPerson(@RequestBody PersonDTO updatedPerson) {
+		Person personDB = manager.save(mapper.map(updatedPerson, Person.class));
+		PersonDTO personDTO = null;
+		if (null != personDB) {
+			personDTO = mapper.map(personDB, PersonDTO.class);
+		}
+		return personDTO;
 	}
 
 }

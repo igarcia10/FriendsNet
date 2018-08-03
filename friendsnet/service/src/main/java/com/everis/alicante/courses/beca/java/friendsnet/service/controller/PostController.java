@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.enums
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.enums.PostType;
 import com.everis.alicante.courses.beca.java.friendsnet.service.dto.PostDTO;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/posts")
 public class PostController extends AbstractController<PostDTO, Post, Long> {

@@ -1,8 +1,6 @@
 package com.everis.alicante.courses.beca.java.friendsnet.service.config;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -23,16 +21,8 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/persons/**",
             "/persons/**/relate",
             "/posts",
+            "/posts/**",
             "/posts/person/**",
-            "/posts/**/person/**/like/**"
-            
-    };
-    
-    private static final String[] POST_WHITELIST = {
-
-            "/persons/**",
-            "/persons/**/relate",
-            "/posts",
             "/posts/**/person/**/like/**"
             
     };
@@ -44,12 +34,6 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
         
         http.csrf().disable();
         http.headers().frameOptions().disable();
-    }
-    
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(HttpMethod.POST, POST_WHITELIST)
-        	.and().ignoring().antMatchers(HttpMethod.DELETE, "/posts/**");
     }
 }
 
