@@ -3,14 +3,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @Configuration
+@EnableWebSecurity
 class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] WHITELIST = {
 
-            // -- swagger ui
+    		"/",
+    		"/console/**",
+    		"/h2-console/**",
             "/swagger-resources/**",
             "/swagger-ui.html",
             "/v2/api-docs",
@@ -37,6 +41,9 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(WHITELIST).permitAll();
+        
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
     }
     
     @Override
