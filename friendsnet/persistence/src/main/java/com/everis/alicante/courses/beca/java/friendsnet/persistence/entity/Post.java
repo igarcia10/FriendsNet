@@ -46,7 +46,7 @@ public class Post implements FNEntity {
     @JoinColumn(name = "person_id")
     private Person person;
 	
-	@OneToMany(mappedBy = "post", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@OneToMany(mappedBy = "post", orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private List<Like> likes = new ArrayList<>();
 	
 	public void addLike(Like like) {

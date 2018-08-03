@@ -35,12 +35,14 @@ public class PostManagerImpl extends AbstractManager<Post, Long> implements Post
 		Post post = postDAO.findById(idPost).orElse(null);
 		Person person = personDAO.findById(idPerson).orElse(null);
 		if (null != post && null != person) {
-			Like like = likeDAO.findByPersonId(idPerson);
+			Like like = likeDAO.findByPersonIdAndPostId(idPerson, idPost);
 			if (null == like) {
 				like = this.createLike(idPost, idPerson, type);
 				post.getLikes().add(like);
 				person.getLikes().add(like);
 				postDAO.save(post);
+				personDAO.save(person);
+				likeDAO.save(like);
 			} else {
 				like.setType(type);
 				likeDAO.save(like);
