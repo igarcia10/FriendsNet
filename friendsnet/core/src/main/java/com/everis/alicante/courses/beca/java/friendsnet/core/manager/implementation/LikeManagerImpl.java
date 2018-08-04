@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Service;
 
 import com.everis.alicante.courses.beca.java.friendsnet.core.manager.AbstractManager;
 import com.everis.alicante.courses.beca.java.friendsnet.core.manager.LikeManager;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.dao.LikeDAO;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Like;
 
+@Service
 public class LikeManagerImpl extends AbstractManager<Like, Long> implements LikeManager {
 	
 	@Autowired

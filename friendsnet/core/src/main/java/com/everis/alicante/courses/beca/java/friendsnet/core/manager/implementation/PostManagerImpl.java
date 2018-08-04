@@ -40,12 +40,14 @@ public class PostManagerImpl extends AbstractManager<Post, Long> implements Post
 				like = this.createLike(idPost, idPerson, type);
 				post.getLikes().add(like);
 				person.getLikes().add(like);
-				postDAO.save(post);
-				personDAO.save(person);
 				likeDAO.save(like);
 			} else {
-				like.setType(type);
-				likeDAO.save(like);
+				if (type == like.getType()) {
+					likeDAO.delete(like);
+				} else {
+					like.setType(type);
+					likeDAO.save(like);					
+				}
 			}
 		} else {
 			post = null;
