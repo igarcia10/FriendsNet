@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.everis.alicante.courses.beca.java.friendsnet.core.manager.AbstractManager;
 import com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation.EventManagerImpl;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Event;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.enums.EventType;
@@ -24,12 +25,11 @@ import com.everis.alicante.courses.beca.java.friendsnet.service.dto.EventDTO;
 @RequestMapping("/events")
 public class EventController extends AbstractController<EventDTO, Event, Long> {
 
-	protected EventController() {
-		super(Event.class, EventDTO.class);
-	}
-
-	@Autowired
 	private EventManagerImpl manager;
+
+	protected EventController(@Qualifier("eventManagerImpl") AbstractManager<Event, Long> manager) {
+		super(Event.class, EventDTO.class, manager);
+	}
 
 	@PostMapping("/{id}/person/{idperson}/add")
 	public EventDTO addPerson(@PathVariable("id") Long id, @PathVariable("idperson") Long idperson) {

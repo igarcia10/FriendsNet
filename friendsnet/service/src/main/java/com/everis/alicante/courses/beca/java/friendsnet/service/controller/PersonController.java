@@ -3,7 +3,7 @@ package com.everis.alicante.courses.beca.java.friendsnet.service.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.everis.alicante.courses.beca.java.friendsnet.core.manager.AbstractManager;
 import com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation.PersonManagerImpl;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Person;
 import com.everis.alicante.courses.beca.java.friendsnet.service.dto.PersonDTO;
@@ -20,12 +21,12 @@ import com.everis.alicante.courses.beca.java.friendsnet.service.dto.PersonDTO;
 @RequestMapping("/persons")
 public class PersonController extends AbstractController<PersonDTO, Person, Long> {
 
-	protected PersonController() {
-		super(Person.class, PersonDTO.class);
+	private PersonManagerImpl manager;
+
+	protected PersonController(@Qualifier("personManagerImpl") AbstractManager<Person, Long> manager) {
+		super(Person.class, PersonDTO.class, manager);
 	}
 	
-	@Autowired
-	private PersonManagerImpl manager;
 
 	@PostMapping("/{id}/relate")
 	public PersonDTO relate(@PathVariable("id") Long id, @RequestBody List<PersonDTO> friendsDTO) {

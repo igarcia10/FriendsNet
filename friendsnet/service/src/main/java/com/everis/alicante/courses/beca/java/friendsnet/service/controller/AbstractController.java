@@ -17,18 +17,22 @@ import com.everis.alicante.courses.beca.java.friendsnet.service.dto.DTOEntity;
 
 public abstract class AbstractController<DTO extends DTOEntity, E extends FNEntity, ID> {
 
-	@Autowired
 	private AbstractManager<E, ID> manager;
 
-	@Autowired
 	protected DozerBeanMapper mapper;
 
 	private Class<E> entityClass;
 	private Class<DTO> dtoClass;
 
-	protected AbstractController(Class<E> entityClass, Class<DTO> dtoClass) {
+	protected AbstractController(Class<E> entityClass, Class<DTO> dtoClass, AbstractManager<E, ID> manager) {
 		this.entityClass = entityClass;
 		this.dtoClass = dtoClass;
+		this.manager = manager;
+	}
+	
+	@Autowired
+	public void setMapper(DozerBeanMapper mapper) {
+		this.mapper = mapper;
 	}
 
 	@GetMapping

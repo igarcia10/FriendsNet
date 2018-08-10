@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.everis.alicante.courses.beca.java.friendsnet.core.manager.AbstractManager;
 import com.everis.alicante.courses.beca.java.friendsnet.core.manager.implementation.PostManagerImpl;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.Post;
 import com.everis.alicante.courses.beca.java.friendsnet.persistence.entity.enums.LikeType;
@@ -27,12 +28,11 @@ import com.everis.alicante.courses.beca.java.friendsnet.service.dto.PostDTO;
 @RequestMapping("/posts")
 public class PostController extends AbstractController<PostDTO, Post, Long> {
 
-	protected PostController() {
-		super(Post.class, PostDTO.class);
-	}
-
-	@Autowired
 	private PostManagerImpl manager;
+
+	protected PostController(@Qualifier("postManagerImpl") AbstractManager<Post, Long> manager) {
+		super(Post.class, PostDTO.class, manager);
+	}
 
 	@GetMapping("/person/{id}")
 	public List<PostDTO> getByPersonId(@PathVariable("id") Long id) {
